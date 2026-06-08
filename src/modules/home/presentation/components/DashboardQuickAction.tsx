@@ -18,7 +18,7 @@ export const DashboardQuickAction = ({
 }: DashboardQuickActionProps) => (
   <Pressable
     accessibilityRole="button"
-    android_ripple={{ color: 'rgba(59, 145, 234, 0.12)' }}
+    android_ripple={{ color: 'rgba(18, 46, 70, 0.12)' }}
     hitSlop={spacing(4)}
     onPress={onPress}
     style={({ pressed }) => [

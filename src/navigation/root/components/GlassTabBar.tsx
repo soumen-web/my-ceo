@@ -308,7 +308,7 @@ export const getGlassTabBarHeight = (bottomInset: number) =>
 
 const styles = StyleSheet.create({
   activeIcon: {
-    textShadowColor: 'rgba(59, 145, 234, 0.28)',
+    textShadowColor: 'rgba(18, 46, 70, 0.28)',
     textShadowOffset: { height: 0, width: 0 },
     textShadowRadius: spacing(6),
   },

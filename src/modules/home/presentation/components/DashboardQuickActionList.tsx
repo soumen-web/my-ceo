@@ -34,7 +34,7 @@ export const DashboardQuickActionList = ({
         <PremiumAnimatedView delay={index * 56} distance={5} key={action.id}>
           <PremiumPressable
             accessibilityRole="button"
-            android_ripple={{ color: 'rgba(59, 145, 234, 0.12)' }}
+            android_ripple={{ color: 'rgba(18, 46, 70, 0.12)' }}
             hitSlop={spacing(4)}
             onPress={() => onActionPress(action)}
             style={({ pressed }) => [
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   item: {
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderColor: 'rgba(59, 145, 234, 0.34)',
+    borderColor: 'rgba(18, 46, 70, 0.34)',
     borderRadius: radius(8),
     borderWidth: 1,
     elevation: 2,

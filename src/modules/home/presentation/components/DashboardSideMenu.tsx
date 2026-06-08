@@ -404,8 +404,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing(10),
   },
   menuItemActive: {
-    backgroundColor: 'rgba(59, 145, 234, 0.2)',
-    borderColor: 'rgba(59, 145, 234, 0.42)',
+    backgroundColor: 'rgba(18, 46, 70, 0.2)',
+    borderColor: 'rgba(18, 46, 70, 0.42)',
     shadowColor: reactNativeColorScheme.ultiHuman.accent,
     shadowOffset: { height: spacing(8), width: 0 },
     shadowOpacity: 0.16,

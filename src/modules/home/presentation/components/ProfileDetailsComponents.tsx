@@ -464,7 +464,7 @@ const styles = StyleSheet.create({
   actionChip: {
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.88)',
-    borderColor: 'rgba(59, 145, 234, 0.34)',
+    borderColor: 'rgba(18, 46, 70, 0.34)',
     borderRadius: radius(8),
     borderWidth: 1,
     flex: 1,
@@ -589,7 +589,7 @@ const styles = StyleSheet.create({
   },
   fieldCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.88)',
-    borderColor: 'rgba(59, 145, 234, 0.34)',
+    borderColor: 'rgba(18, 46, 70, 0.34)',
     borderRadius: radius(8),
     borderWidth: 1,
     gap: spacing(6),
@@ -837,7 +837,7 @@ const styles = StyleSheet.create({
   },
   secureFieldCard: {
     backgroundColor: 'rgba(249, 255, 253, 0.94)',
-    borderColor: 'rgba(59, 145, 234, 0.42)',
+    borderColor: 'rgba(18, 46, 70, 0.42)',
   },
   secureFieldAccent: {
     backgroundColor: moduleColors.icon,

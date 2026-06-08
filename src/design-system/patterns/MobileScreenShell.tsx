@@ -95,7 +95,7 @@ export const MobileScreenShell = ({
           verticalRatio={0.08}
         />
         <ResponsiveDecorativeOrb
-          color="rgba(59, 145, 234, 0.12)"
+          color="rgba(18, 46, 70, 0.12)"
           edge="left"
           maxSize={240}
           minSize={190}

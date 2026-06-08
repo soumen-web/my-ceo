@@ -11,7 +11,7 @@ interface DashboardStatGridProps {
 
 export const DashboardStatGrid = ({ stats }: DashboardStatGridProps) => {
   const { width } = useWindowDimensions();
-  const itemWidth = Math.min(spacing(168), Math.max(spacing(142), width * 0.39));
+  const itemWidth = Math.min(spacing(184), Math.max(spacing(156), width * 0.42));
 
   if (!stats.length) {
     return null;
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing(2),
   },
   item: {
-    maxWidth: spacing(168),
-    minWidth: spacing(142),
+    maxWidth: spacing(184),
+    minWidth: spacing(156),
   },
 });

@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
   iconFrame: {
     alignItems: 'center',
-    backgroundColor: 'rgba(59, 145, 234, 0.12)',
+    backgroundColor: 'rgba(18, 46, 70, 0.12)',
     borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(8),
     borderWidth: 1,
