@@ -77,8 +77,8 @@ export const DashboardShellHeader = ({
 const styles = StyleSheet.create({
   avatar: {
     alignItems: 'center',
-    backgroundColor: 'rgba(3, 86, 158, 0.18)',
-    borderColor: 'rgba(3, 86, 158, 0.34)',
+    backgroundColor: 'rgba(42, 153, 213, 0.18)',
+    borderColor: 'rgba(42, 153, 213, 0.34)',
     borderWidth: 1,
     borderRadius: radius(17),
     height: spacing(34),

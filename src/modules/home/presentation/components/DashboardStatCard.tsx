@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
   },
   iconFrame: {
     alignItems: 'center',
-    backgroundColor: 'rgba(3, 86, 158, 0.14)',
-    borderColor: 'rgba(3, 86, 158, 0.28)',
+    backgroundColor: 'rgba(42, 153, 213, 0.14)',
+    borderColor: 'rgba(42, 153, 213, 0.28)',
     borderRadius: radius(8),
     borderWidth: 1,
     height: spacing(40),

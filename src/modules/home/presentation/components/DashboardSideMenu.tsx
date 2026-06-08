@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
   notificationButton: {
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.74)',
-    borderColor: 'rgba(184, 217, 244, 0.86)',
+    borderColor: 'rgba(190, 226, 245, 0.86)',
     borderRadius: radius(8),
     borderWidth: 1,
     height: spacing(42),
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
   drawerHeader: {
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.58)',
-    borderColor: 'rgba(184, 217, 244, 0.76)',
+    borderColor: 'rgba(190, 226, 245, 0.76)',
     borderRadius: radius(8),
     borderWidth: 1,
     flexDirection: 'row',
@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     backgroundColor: 'rgba(255, 255, 255, 0.48)',
-    borderTopColor: 'rgba(184, 217, 244, 0.74)',
+    borderTopColor: 'rgba(190, 226, 245, 0.74)',
     borderTopWidth: 1,
     marginTop: 'auto',
     paddingBottom: spacing(20),
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
   iconFrame: {
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.82)',
-    borderColor: 'rgba(184, 217, 244, 0.84)',
+    borderColor: 'rgba(190, 226, 245, 0.84)',
     borderRadius: radius(8),
     borderWidth: 1,
     height: spacing(42),
@@ -398,8 +398,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing(10),
   },
   menuItemActive: {
-    backgroundColor: 'rgba(3, 86, 158, 0.2)',
-    borderColor: 'rgba(3, 86, 158, 0.42)',
+    backgroundColor: 'rgba(42, 153, 213, 0.2)',
+    borderColor: 'rgba(42, 153, 213, 0.42)',
     shadowColor: reactNativeColorScheme.ultiHuman.accent,
     shadowOffset: { height: spacing(8), width: 0 },
     shadowOpacity: 0.16,

@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
   barTrack: {
     alignItems: 'center',
-    backgroundColor: 'rgba(3, 86, 158, 0.09)',
+    backgroundColor: 'rgba(42, 153, 213, 0.09)',
     borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(8),
     borderWidth: 1,
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
   },
   emptyState: {
     alignItems: 'center',
-    backgroundColor: 'rgba(3, 86, 158, 0.08)',
+    backgroundColor: 'rgba(42, 153, 213, 0.08)',
     borderRadius: radius(8),
     gap: spacing(4),
     minHeight: spacing(156),
@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
     lineHeight: spacing(14),
   },
   presentMetric: {
-    backgroundColor: 'rgba(3, 86, 158, 0.14)',
+    backgroundColor: 'rgba(42, 153, 213, 0.14)',
   },
   presentSegment: {
     backgroundColor: chartColors.present,
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
     padding: spacing(12),
   },
   progressTrack: {
-    backgroundColor: 'rgba(3, 86, 158, 0.13)',
+    backgroundColor: 'rgba(42, 153, 213, 0.13)',
     borderRadius: radius(8),
     height: spacing(10),
     overflow: 'hidden',
@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
   },
   rateBadge: {
     alignItems: 'center',
-    backgroundColor: 'rgba(3, 86, 158, 0.13)',
+    backgroundColor: 'rgba(42, 153, 213, 0.13)',
     borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderSoft,
     borderRadius: radius(8),
     borderWidth: 1,

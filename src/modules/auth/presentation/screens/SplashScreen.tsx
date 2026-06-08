@@ -26,7 +26,7 @@ export const SplashScreen = ({ navigation }: SplashScreenProps) => {
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
       <View style={styles.content}>
-        <UltiHumanLogo size="xl" variant="hero" />
+        <UltiHumanLogo size="xl" style={styles.logo} variant="hero" />
         <ActivityIndicator
           color={reactNativeColorScheme.ultiHuman.accent}
           size="small"
@@ -55,5 +55,11 @@ const styles = StyleSheet.create({
   },
   loader: {
     marginTop: spacing(2),
+  },
+  logo: {
+    alignSelf: "center",
+    height: spacing(230),
+    maxWidth: spacing(360),
+    width: "100%",
   },
 });

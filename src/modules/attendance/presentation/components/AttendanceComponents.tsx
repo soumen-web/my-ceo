@@ -46,7 +46,7 @@ const sky = '#5f8ef7';
 const statusColor: Record<AttendanceDayStatus, string> = {
   absent: coral,
   early: gold,
-  holiday: '#03569e',
+  holiday: '#2a99d5',
   late: '#f59f45',
   leave: sky,
   present: mint,
@@ -656,7 +656,7 @@ const styles = StyleSheet.create({
   calendarDay: {
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.58)',
-    borderColor: 'rgba(184, 217, 244, 0.54)',
+    borderColor: 'rgba(190, 226, 245, 0.54)',
     borderRadius: radius(8),
     borderWidth: 1,
     gap: spacing(2),
@@ -796,7 +796,7 @@ const styles = StyleSheet.create({
   },
   dayDetailMetric: {
     backgroundColor: 'rgba(255, 255, 255, 0.64)',
-    borderColor: 'rgba(184, 217, 244, 0.58)',
+    borderColor: 'rgba(190, 226, 245, 0.58)',
     borderRadius: radius(8),
     borderWidth: 1,
     flex: 1,
@@ -1115,7 +1115,7 @@ const styles = StyleSheet.create({
   monthOption: {
     alignItems: 'center',
     backgroundColor: moduleColors.surfaceRaised,
-    borderColor: 'rgba(184, 217, 244, 0.7)',
+    borderColor: 'rgba(190, 226, 245, 0.7)',
     borderRadius: radius(8),
     borderWidth: 1,
     minHeight: spacing(34),
@@ -1146,7 +1146,7 @@ const styles = StyleSheet.create({
   },
   monthlyInsightCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.68)',
-    borderColor: 'rgba(184, 217, 244, 0.64)',
+    borderColor: 'rgba(190, 226, 245, 0.64)',
     borderRadius: radius(8),
     borderWidth: 1,
     gap: spacing(2),
@@ -1190,7 +1190,7 @@ const styles = StyleSheet.create({
   },
   panel: {
     backgroundColor: 'rgba(255, 255, 255, 0.66)',
-    borderColor: 'rgba(184, 217, 244, 0.68)',
+    borderColor: 'rgba(190, 226, 245, 0.68)',
     borderRadius: radius(8),
     borderWidth: 1,
     gap: spacing(14),
@@ -1343,7 +1343,7 @@ const styles = StyleSheet.create({
     paddingBottom: spacing(8),
   },
   timelineLine: {
-    backgroundColor: 'rgba(3, 86, 158, 0.16)',
+    backgroundColor: 'rgba(42, 153, 213, 0.16)',
     flex: 1,
     width: spacing(2),
   },

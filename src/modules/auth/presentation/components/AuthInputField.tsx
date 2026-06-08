@@ -143,8 +143,8 @@ const styles = StyleSheet.create({
   },
   iconFrame: {
     alignItems: 'center',
-    backgroundColor: 'rgba(3, 86, 158, 0.13)',
-    borderColor: 'rgba(3, 86, 158, 0.26)',
+    backgroundColor: 'rgba(42, 153, 213, 0.13)',
+    borderColor: 'rgba(42, 153, 213, 0.26)',
     borderRadius: spacing(16),
     borderWidth: 1,
     height: spacing(32),
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   inputWrap: {
     alignItems: 'center',
     backgroundColor: reactNativeColorScheme.ultiHuman.surface.raised,
-    borderColor: 'rgba(3, 86, 158, 0.28)',
+    borderColor: 'rgba(42, 153, 213, 0.28)',
     borderRadius: spacing(16),
     borderWidth: 1,
     flexDirection: 'row',

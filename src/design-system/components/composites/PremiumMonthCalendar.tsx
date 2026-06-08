@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
   calendarDayContent: {
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.72)',
-    borderColor: 'rgba(184, 217, 244, 0.54)',
+    borderColor: 'rgba(190, 226, 245, 0.54)',
     borderRadius: radius(8),
     borderWidth: 1,
     gap: spacing(2),
@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
   },
   panel: {
     backgroundColor: 'rgba(255, 255, 255, 0.66)',
-    borderColor: 'rgba(184, 217, 244, 0.68)',
+    borderColor: 'rgba(190, 226, 245, 0.68)',
     borderRadius: radius(8),
     borderWidth: 1,
     gap: spacing(14),
@@ -457,8 +457,8 @@ const styles = StyleSheet.create({
     transform: [{ scale: 0.985 }],
   },
   rangeBridge: {
-    backgroundColor: 'rgba(3, 86, 158, 0.2)',
-    borderColor: 'rgba(3, 86, 158, 0.26)',
+    backgroundColor: 'rgba(42, 153, 213, 0.2)',
+    borderColor: 'rgba(42, 153, 213, 0.26)',
     borderWidth: 1,
     height: spacing(36),
     position: 'absolute',
