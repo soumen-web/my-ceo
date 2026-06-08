@@ -19,7 +19,7 @@ import {
   sanitizeForLogs,
   sanitizeForTelemetry,
 } from '@compliance/shared/redaction/sanitize';
-import { createDefaultConsentState } from '@compliance/shared/consent/consentService';
+import { createDefaultConsentState } from '@compliance/shared/consent/defaultConsentState';
 
 interface ComplianceRuntimeSnapshot {
   config: ComplianceConfig;

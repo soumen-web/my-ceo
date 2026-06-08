@@ -1,4 +1,4 @@
-import { complianceRuntime } from '@compliance/core/runtime/complianceRuntime';
+import { defaultCompliancePolicies } from '@compliance/core/policies/defaultPolicies';
 import type { ResolvedCompliancePolicies } from '@compliance/core/types/policies';
 import {
   applyMaskingStrategy,
@@ -36,7 +36,7 @@ const sanitizeValue = (
   options: SanitizeOptions,
   mode: 'display' | 'logging' | 'telemetry',
 ): unknown => {
-  const policies = options.policies ?? complianceRuntime.getResolvedPolicies();
+  const policies = options.policies ?? defaultCompliancePolicies;
   const classification = resolveClassification(path, value, options.metadata);
 
   if (
@@ -124,7 +124,7 @@ export const scrubPayloadBeforePersist = (
   metadata?: FieldClassificationMap,
   policies?: ResolvedCompliancePolicies,
 ): unknown => {
-  const resolvedPolicies = policies ?? complianceRuntime.getResolvedPolicies();
+  const resolvedPolicies = policies ?? defaultCompliancePolicies;
 
   return transformStructuredValue(value, (nestedValue, path) => {
     const classification = resolveClassification(path, nestedValue, metadata);
@@ -147,7 +147,7 @@ export const scrubPayloadBeforeNetwork = (
   metadata?: FieldClassificationMap,
   policies?: ResolvedCompliancePolicies,
 ): unknown => {
-  const resolvedPolicies = policies ?? complianceRuntime.getResolvedPolicies();
+  const resolvedPolicies = policies ?? defaultCompliancePolicies;
 
   return transformStructuredValue(value, (nestedValue, path) => {
     const classification = resolveClassification(path, nestedValue, metadata);

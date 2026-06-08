@@ -2,7 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { GlassView, isGlassEffectAPIAvailable } from "expo-glass-effect";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Platform, Pressable, StyleSheet, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -19,15 +19,17 @@ import { fontSize, spacing } from "@/utils/scale";
 type TabRouteName = keyof AppTabParamList;
 
 const TAB_BAR_HEIGHT = spacing(66);
-const TAB_HORIZONTAL_MARGIN = spacing(9);
+const TAB_BAR_WIDTH = "88%";
 const TAB_ITEM_HEIGHT = spacing(50);
-const ACTIVE_CAPSULE_WIDTH = spacing(96);
+const ACTIVE_CAPSULE_WIDTH = spacing(84);
+const ACTIVE_CAPSULE_COLLAPSED_WIDTH = spacing(40);
 const ACTIVE_CAPSULE_HEIGHT = spacing(36);
 const PILL_RADIUS = 999;
 const ACTIVE_LABEL_GAP = spacing(5);
-const ACTIVE_LABEL_WIDTH = spacing(48);
+const ACTIVE_LABEL_WIDTH = spacing(38);
 const TAB_ITEM_GAP = spacing(0);
 const ANIMATION_DURATION_MS = 240;
+const LABEL_IDLE_TIMEOUT_MS = 15000;
 
 const glassPalette = {
   activeText: "#b9e5ff",
@@ -71,6 +73,7 @@ interface GlassTabItemProps {
   focused: boolean;
   icon: keyof typeof Feather.glyphMap;
   label: string;
+  labelVisible: boolean;
   onLongPress: () => void;
   onPress: () => void;
   testID?: string;
@@ -81,32 +84,47 @@ const GlassTabItem = ({
   focused,
   icon,
   label,
+  labelVisible,
   onLongPress,
   onPress,
   testID,
 }: GlassTabItemProps) => {
   const reduceMotionEnabled = useReducedMotionPreference();
-  const progress = useSharedValue(focused ? 1 : 0);
+  const selectionProgress = useSharedValue(focused ? 1 : 0);
+  const labelProgress = useSharedValue(focused && labelVisible ? 1 : 0);
 
   useEffect(() => {
-    progress.value = withTiming(focused ? 1 : 0, {
+    selectionProgress.value = withTiming(focused ? 1 : 0, {
       duration: reduceMotionEnabled ? 0 : ANIMATION_DURATION_MS,
     });
-  }, [focused, progress, reduceMotionEnabled]);
+    labelProgress.value = withTiming(focused && labelVisible ? 1 : 0, {
+      duration: reduceMotionEnabled ? 0 : ANIMATION_DURATION_MS,
+    });
+  }, [
+    focused,
+    labelProgress,
+    labelVisible,
+    reduceMotionEnabled,
+    selectionProgress,
+  ]);
 
   const itemAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: 0.78 + progress.value * 0.22,
-    transform: [{ scale: 0.95 + progress.value * 0.05 }],
+    opacity: 0.78 + selectionProgress.value * 0.22,
+    transform: [{ scale: 0.95 + selectionProgress.value * 0.05 }],
   }));
 
   const labelAnimatedStyle = useAnimatedStyle(() => ({
-    marginLeft: ACTIVE_LABEL_GAP * progress.value,
-    opacity: progress.value,
-    width: ACTIVE_LABEL_WIDTH * progress.value,
+    marginLeft: ACTIVE_LABEL_GAP * labelProgress.value,
+    opacity: labelProgress.value,
+    width: ACTIVE_LABEL_WIDTH * labelProgress.value,
   }));
 
   const activeGlowAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: progress.value,
+    opacity: selectionProgress.value,
+    width:
+      ACTIVE_CAPSULE_COLLAPSED_WIDTH +
+      (ACTIVE_CAPSULE_WIDTH - ACTIVE_CAPSULE_COLLAPSED_WIDTH) *
+        labelProgress.value,
   }));
 
   const iconColor = focused
@@ -175,12 +193,35 @@ export const GlassTabBar = ({
   state,
 }: BottomTabBarProps) => {
   const safeAreaInsets = useSafeAreaInsets();
+  const [labelsVisible, setLabelsVisible] = useState(true);
+  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const bottomInset = Math.max(
     insets.bottom,
     safeAreaInsets.bottom,
     spacing(10),
   );
   const glassAvailable = canUseGlassEffect();
+
+  const showLabelsTemporarily = useCallback(() => {
+    if (idleTimerRef.current) {
+      clearTimeout(idleTimerRef.current);
+    }
+
+    setLabelsVisible(true);
+    idleTimerRef.current = setTimeout(() => {
+      setLabelsVisible(false);
+    }, LABEL_IDLE_TIMEOUT_MS);
+  }, []);
+
+  useEffect(() => {
+    showLabelsTemporarily();
+
+    return () => {
+      if (idleTimerRef.current) {
+        clearTimeout(idleTimerRef.current);
+      }
+    };
+  }, [showLabelsTemporarily, state.index]);
 
   const barContent = (
     <View style={styles.tabRow}>
@@ -195,6 +236,8 @@ export const GlassTabBar = ({
             : (options.title ?? labelByRoute[routeName] ?? route.name);
 
         const onPress = () => {
+          showLabelsTemporarily();
+
           const event = navigation.emit({
             canPreventDefault: true,
             target: route.key,
@@ -222,6 +265,7 @@ export const GlassTabBar = ({
             icon={iconByRoute[routeName] ?? "circle"}
             key={route.key}
             label={label}
+            labelVisible={labelsVisible}
             onLongPress={onLongPress}
             onPress={onPress}
             testID={options.tabBarButtonTestID}
@@ -343,12 +387,11 @@ const styles = StyleSheet.create({
     margin: StyleSheet.hairlineWidth,
   },
   root: {
+    alignSelf: "center",
     backgroundColor: "transparent",
     bottom: spacing(4),
-    left: 0,
-    paddingHorizontal: TAB_HORIZONTAL_MARGIN,
     position: "absolute",
-    right: 0,
+    width: TAB_BAR_WIDTH,
   },
   tabButton: {
     alignItems: "center",

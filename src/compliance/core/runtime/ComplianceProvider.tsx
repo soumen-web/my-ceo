@@ -18,7 +18,8 @@ import type {
   ComplianceConfigOverrides,
 } from '@compliance/core/types/config';
 import type { ConsentState } from '@compliance/core/types/consent';
-import { consentService, createDefaultConsentState } from '@compliance/shared/consent/consentService';
+import { createDefaultConsentState } from '@compliance/shared/consent/defaultConsentState';
+import { consentService } from '@compliance/shared/consent/consentService';
 
 import type { ComplianceEngine } from '@compliance/core/engine/createComplianceEngine';
 import type { CompliancePolicyGateway } from '@compliance/core/guards/CompliancePolicyGateway';

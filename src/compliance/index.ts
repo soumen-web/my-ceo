@@ -48,8 +48,10 @@ export {
   ConsentGate,
 } from './shared/consent/ConsentGate';
 export {
-  consentService,
   createDefaultConsentState,
+} from './shared/consent/defaultConsentState';
+export {
+  consentService,
 } from './shared/consent/consentService';
 export { MaskedText } from './shared/masking/MaskedText';
 export {
