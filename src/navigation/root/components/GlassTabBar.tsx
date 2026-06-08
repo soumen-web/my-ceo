@@ -1,55 +1,58 @@
-import { Feather } from '@expo/vector-icons';
-import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { GlassView, isGlassEffectAPIAvailable } from 'expo-glass-effect';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useEffect, useState } from 'react';
-import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import { Feather } from "@expo/vector-icons";
+import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import { GlassView, isGlassEffectAPIAvailable } from "expo-glass-effect";
+import { LinearGradient } from "expo-linear-gradient";
+import { useEffect } from "react";
+import { Platform, Pressable, StyleSheet, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-} from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+} from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { AppFonts } from '@/assets/fonts';
-import { useReducedMotionPreference } from '@/design-system/hooks';
-import { semanticColorTokens } from '@/design-system/tokens/colors';
-import type { AppTabParamList } from '@/navigation/route-types';
-import { fontSize, spacing } from '@/utils/scale';
+import { AppFonts } from "@/assets/fonts";
+import { useReducedMotionPreference } from "@/design-system/hooks";
+import type { AppTabParamList } from "@/navigation/route-types";
+import { fontSize, spacing } from "@/utils/scale";
 
 type TabRouteName = keyof AppTabParamList;
 
 const TAB_BAR_HEIGHT = spacing(66);
 const TAB_HORIZONTAL_MARGIN = spacing(26);
 const PILL_RADIUS = 999;
-const ACTIVE_LIFT = spacing(1);
+const ACTIVE_LABEL_GAP = spacing(5);
+const ACTIVE_LABEL_WIDTH = spacing(44);
 const TAB_ITEM_GAP = spacing(2);
 const ANIMATION_DURATION_MS = 240;
 
 const glassPalette = {
-  baseSurface: 'rgba(255, 255, 255, 0.14)',
-  blueRefraction: 'rgba(74, 182, 255, 0.08)',
-  inactiveText: 'rgba(200, 215, 230, 0.62)',
-  innerStroke: 'rgba(255, 255, 255, 0.46)',
-  shadow: 'rgba(0, 11, 24, 0.42)',
+  activeText: "#b9e5ff",
+  baseSurface: "rgba(3, 14, 27, 0.38)",
+  blueRefraction: "rgba(74, 182, 255, 0.12)",
+  inactiveText: "rgba(226, 240, 251, 0.74)",
+  innerStroke: "rgba(255, 255, 255, 0.2)",
+  nativeTint: "rgba(3, 14, 27, 0.28)",
+  rim: "rgba(174, 224, 255, 0.36)",
+  shadow: "rgba(0, 11, 24, 0.5)",
 };
 
 const iconByRoute: Record<TabRouteName, keyof typeof Feather.glyphMap> = {
-  TabHome: 'home',
-  TabMyDesk: 'briefcase',
-  TabProfile: 'user',
-  TabVision: 'book-open',
+  TabHome: "home",
+  TabMyDesk: "briefcase",
+  TabProfile: "user",
+  TabVision: "book-open",
 };
 
 const labelByRoute: Record<TabRouteName, string> = {
-  TabHome: 'Home',
-  TabMyDesk: 'MyDesk',
-  TabProfile: 'Profile',
-  TabVision: 'Vision',
+  TabHome: "Home",
+  TabMyDesk: "MyDesk",
+  TabProfile: "Profile",
+  TabVision: "Vision",
 };
 
 const canUseGlassEffect = () => {
-  if (Platform.OS !== 'ios') {
+  if (Platform.OS !== "ios") {
     return false;
   }
 
@@ -90,14 +93,13 @@ const GlassTabItem = ({
 
   const itemAnimatedStyle = useAnimatedStyle(() => ({
     opacity: 0.78 + progress.value * 0.22,
-    transform: [
-      { translateY: -ACTIVE_LIFT * progress.value },
-      { scale: 0.95 + progress.value * 0.05 },
-    ],
+    transform: [{ scale: 0.95 + progress.value * 0.05 }],
   }));
 
   const labelAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: 0.58 + progress.value * 0.42,
+    marginLeft: ACTIVE_LABEL_GAP * progress.value,
+    opacity: progress.value,
+    width: ACTIVE_LABEL_WIDTH * progress.value,
   }));
 
   const activeGlowAnimatedStyle = useAnimatedStyle(() => ({
@@ -105,123 +107,95 @@ const GlassTabItem = ({
   }));
 
   const iconColor = focused
-    ? semanticColorTokens.light.primaryPressed
+    ? glassPalette.activeText
     : glassPalette.inactiveText;
   const labelColor = focused
-    ? semanticColorTokens.light.primaryPressed
+    ? glassPalette.activeText
     : glassPalette.inactiveText;
 
   return (
-    <Pressable
-      accessibilityLabel={accessibilityLabel}
-      accessibilityRole="tab"
-      accessibilityState={focused ? { selected: true } : undefined}
-      android_ripple={{ borderless: false, color: 'rgba(184, 220, 255, 0.16)' }}
-      hitSlop={spacing(4)}
-      onLongPress={onLongPress}
-      onPress={onPress}
-      style={({ pressed }) => [
-        styles.tabButton,
-        pressed ? styles.tabButtonPressed : undefined,
-      ]}
-      testID={testID}
-    >
-      <Animated.View
-        style={[
-          styles.tabItem,
-          itemAnimatedStyle,
+    <View style={styles.tabButtonWrap}>
+      <Pressable
+        accessibilityLabel={accessibilityLabel}
+        accessibilityRole="tab"
+        accessibilityState={focused ? { selected: true } : undefined}
+        android_ripple={{
+          borderless: false,
+          color: "rgba(184, 220, 255, 0.16)",
+        }}
+        hitSlop={spacing(4)}
+        onLongPress={onLongPress}
+        onPress={onPress}
+        style={({ pressed }) => [
+          styles.tabButton,
+          pressed ? styles.tabButtonPressed : undefined,
         ]}
+        testID={testID}
       >
-        {focused ? (
+        <Animated.View style={[styles.tabItem, itemAnimatedStyle]}>
           <Animated.View
             pointerEvents="none"
-            style={[styles.activeSoftSheen, activeGlowAnimatedStyle]}
+            style={[styles.activeCapsule, activeGlowAnimatedStyle]}
           >
             <LinearGradient
-              colors={[
-                'rgba(255, 255, 255, 0.28)',
-                'rgba(255, 255, 255, 0)',
-              ]}
+              colors={["rgba(255, 255, 255, 0.16)", "rgba(255, 255, 255, 0)"]}
               end={{ x: 1, y: 0 }}
               start={{ x: 0, y: 0 }}
               style={StyleSheet.absoluteFill}
             />
           </Animated.View>
-        ) : null}
-        <Feather
-          color={iconColor}
-          name={icon}
-          size={spacing(23)}
-          style={focused ? styles.activeIcon : styles.inactiveIcon}
-        />
-        <Animated.Text
-          maxFontSizeMultiplier={1.2}
-          numberOfLines={1}
-          style={[styles.tabLabel, { color: labelColor }, labelAnimatedStyle]}
-        >
-          {label}
-        </Animated.Text>
-      </Animated.View>
-    </Pressable>
+          <Feather
+            color={iconColor}
+            name={icon}
+            size={spacing(23)}
+            style={focused ? styles.activeIcon : styles.inactiveIcon}
+          />
+          <Animated.View style={[styles.labelClip, labelAnimatedStyle]}>
+            <Animated.Text
+              maxFontSizeMultiplier={1.2}
+              numberOfLines={1}
+              style={[styles.tabLabel, { color: labelColor }]}
+            >
+              {label}
+            </Animated.Text>
+          </Animated.View>
+        </Animated.View>
+      </Pressable>
+    </View>
   );
 };
 
-export const GlassTabBar = ({ descriptors, insets, navigation, state }: BottomTabBarProps) => {
+export const GlassTabBar = ({
+  descriptors,
+  insets,
+  navigation,
+  state,
+}: BottomTabBarProps) => {
   const safeAreaInsets = useSafeAreaInsets();
-  const bottomInset = Math.max(insets.bottom, safeAreaInsets.bottom, spacing(10));
+  const bottomInset = Math.max(
+    insets.bottom,
+    safeAreaInsets.bottom,
+    spacing(10),
+  );
   const glassAvailable = canUseGlassEffect();
-  const reduceMotionEnabled = useReducedMotionPreference();
-  const [rowWidth, setRowWidth] = useState(0);
-  const activeIndex = useSharedValue(state.index);
-  const routeCount = state.routes.length;
-
-  useEffect(() => {
-    activeIndex.value = withTiming(state.index, {
-      duration: reduceMotionEnabled ? 0 : ANIMATION_DURATION_MS,
-    });
-  }, [activeIndex, reduceMotionEnabled, state.index]);
-
-  const movingCapsuleStyle = useAnimatedStyle(() => {
-    const tabWidth =
-      rowWidth > 0 ? (rowWidth - TAB_ITEM_GAP * Math.max(routeCount - 1, 0)) / routeCount : 0;
-
-    return {
-      opacity: rowWidth > 0 ? 1 : 0,
-      transform: [{ translateX: activeIndex.value * (tabWidth + TAB_ITEM_GAP) }],
-      width: tabWidth,
-    };
-  });
 
   const barContent = (
-    <View
-      onLayout={({ nativeEvent }) => {
-        const nextWidth = nativeEvent.layout.width;
-
-        setRowWidth((previousWidth) =>
-          Math.abs(previousWidth - nextWidth) > 1 ? nextWidth : previousWidth
-        );
-      }}
-      style={styles.tabRow}
-    >
-      <Animated.View
-        pointerEvents="none"
-        style={[styles.movingActiveCapsule, movingCapsuleStyle]}
-      />
+    <View style={styles.tabRow}>
       {state.routes.map((route, index) => {
         const routeName = route.name as TabRouteName;
         const descriptor = descriptors[route.key];
         const options = descriptor.options;
         const focused = state.index === index;
         const label =
-          typeof options.tabBarLabel === 'string'
+          typeof options.tabBarLabel === "string"
             ? options.tabBarLabel
-            : options.title ?? labelByRoute[routeName] ?? route.name;
+            : (options.title ?? labelByRoute[routeName] ?? route.name);
 
         const onPress = () => {
           const event = navigation.emit({
             canPreventDefault: true,
             target: route.key,
-            type: 'tabPress',
+            type: "tabPress",
           });
 
           if (!focused && !event.defaultPrevented) {
@@ -232,15 +206,17 @@ export const GlassTabBar = ({ descriptors, insets, navigation, state }: BottomTa
         const onLongPress = () => {
           navigation.emit({
             target: route.key,
-            type: 'tabLongPress',
+            type: "tabLongPress",
           });
         };
 
         return (
           <GlassTabItem
-            accessibilityLabel={options.tabBarAccessibilityLabel ?? `${label} tab`}
+            accessibilityLabel={
+              options.tabBarAccessibilityLabel ?? `${label} tab`
+            }
             focused={focused}
-            icon={iconByRoute[routeName] ?? 'circle'}
+            icon={iconByRoute[routeName] ?? "circle"}
             key={route.key}
             label={label}
             onLongPress={onLongPress}
@@ -256,7 +232,7 @@ export const GlassTabBar = ({ descriptors, insets, navigation, state }: BottomTa
     <>
       <LinearGradient
         colors={[
-          'rgba(255, 255, 255, 0.24)',
+          "rgba(255, 255, 255, 0.09)",
           glassPalette.baseSurface,
           glassPalette.blueRefraction,
         ]}
@@ -266,9 +242,9 @@ export const GlassTabBar = ({ descriptors, insets, navigation, state }: BottomTa
       />
       <LinearGradient
         colors={[
-          'rgba(255, 255, 255, 0.5)',
-          'rgba(255, 255, 255, 0.08)',
-          'rgba(255, 255, 255, 0)',
+          "rgba(255, 255, 255, 0.32)",
+          "rgba(174, 224, 255, 0.055)",
+          "rgba(255, 255, 255, 0)",
         ]}
         pointerEvents="none"
         style={styles.topGlassHighlight}
@@ -291,7 +267,7 @@ export const GlassTabBar = ({ descriptors, insets, navigation, state }: BottomTa
               glassEffectStyle="regular"
               isInteractive
               style={[StyleSheet.absoluteFill, styles.nativeGlassLayer]}
-              tintColor={semanticColorTokens.light.glassTint}
+              tintColor={glassPalette.nativeTint}
             />
           ) : (
             <View style={[StyleSheet.absoluteFill, styles.fallbackGlass]} />
@@ -308,44 +284,52 @@ export const getGlassTabBarHeight = (bottomInset: number) =>
 
 const styles = StyleSheet.create({
   activeIcon: {
-    textShadowColor: 'rgba(18, 46, 70, 0.28)',
+    textShadowColor: "rgba(74, 182, 255, 0.42)",
     textShadowOffset: { height: 0, width: 0 },
     textShadowRadius: spacing(6),
   },
-  activeSoftSheen: {
+  activeCapsule: {
+    backgroundColor: "rgba(255, 255, 255, 0.13)",
+    borderColor: "rgba(174, 224, 255, 0.42)",
     borderRadius: PILL_RADIUS,
+    borderWidth: 1,
     bottom: spacing(5),
     left: spacing(7),
-    position: 'absolute',
+    overflow: "hidden",
+    position: "absolute",
     right: spacing(7),
+    shadowColor: "rgba(74, 182, 255, 0.26)",
+    shadowOffset: { height: spacing(8), width: 0 },
+    shadowOpacity: 0.24,
+    shadowRadius: spacing(16),
     top: spacing(5),
   },
   fallbackGlass: {
-    backgroundColor: semanticColorTokens.light.glassTint,
+    backgroundColor: "rgba(3, 14, 27, 0.42)",
   },
   glassFrame: {
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-    borderColor: semanticColorTokens.light.glassBorder,
+    backgroundColor: "rgba(3, 14, 27, 0.18)",
+    borderColor: glassPalette.rim,
     borderRadius: PILL_RADIUS,
     borderWidth: 1,
     height: TAB_BAR_HEIGHT,
-    justifyContent: 'center',
-    overflow: 'hidden',
+    justifyContent: "center",
+    overflow: "hidden",
     paddingHorizontal: spacing(6),
   },
   glassShadow: {
     borderRadius: PILL_RADIUS,
     shadowColor: glassPalette.shadow,
-    shadowOffset: { height: spacing(10), width: 0 },
-    shadowOpacity: 0.22,
-    shadowRadius: spacing(18),
+    shadowOffset: { height: spacing(14), width: 0 },
+    shadowOpacity: 0.32,
+    shadowRadius: spacing(24),
   },
   nativeGlassLayer: {
     borderRadius: PILL_RADIUS,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   inactiveIcon: {
-    textShadowColor: 'rgba(255, 255, 255, 0.32)',
+    textShadowColor: "rgba(0, 11, 24, 0.54)",
     textShadowOffset: { height: 0, width: 0 },
     textShadowRadius: spacing(4),
   },
@@ -354,34 +338,28 @@ const styles = StyleSheet.create({
     borderColor: glassPalette.innerStroke,
     borderRadius: PILL_RADIUS,
     borderWidth: 1,
-    margin: 1,
-  },
-  movingActiveCapsule: {
-    backgroundColor: 'rgba(255, 255, 255, 0.26)',
-    borderColor: 'rgba(255, 255, 255, 0.56)',
-    borderRadius: PILL_RADIUS,
-    borderWidth: 1,
-    bottom: spacing(5),
-    left: 0,
-    position: 'absolute',
-    shadowColor: 'rgba(36, 111, 196, 0.16)',
-    shadowOffset: { height: spacing(7), width: 0 },
-    shadowOpacity: 0.2,
-    shadowRadius: spacing(14),
-    top: spacing(5),
-    zIndex: 1,
+    margin: StyleSheet.hairlineWidth,
   },
   root: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     bottom: spacing(4),
     left: 0,
     paddingHorizontal: TAB_HORIZONTAL_MARGIN,
-    position: 'absolute',
+    position: "absolute",
     right: 0,
   },
   tabButton: {
+    alignItems: "center",
     borderRadius: PILL_RADIUS,
     flex: 1,
+    justifyContent: "center",
+    zIndex: 2,
+  },
+  tabButtonWrap: {
+    borderRadius: PILL_RADIUS,
+    flex: 1,
+    height: spacing(54),
+    minWidth: spacing(48),
     zIndex: 2,
   },
   tabButtonPressed: {
@@ -389,32 +367,40 @@ const styles = StyleSheet.create({
     transform: [{ scale: 0.985 }],
   },
   tabItem: {
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: PILL_RADIUS,
-    gap: spacing(1),
+    flexDirection: "row",
     height: spacing(54),
-    justifyContent: 'center',
-    overflow: 'hidden',
+    justifyContent: "center",
+    overflow: "hidden",
+    paddingHorizontal: spacing(8),
+  },
+  labelClip: {
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
   },
   tabLabel: {
     fontFamily: AppFonts.googleSansMedium,
-    fontSize: fontSize(11),
-    lineHeight: spacing(14),
-    textAlign: 'center',
-    textShadowColor: 'rgba(11, 26, 56, 0.34)',
+    fontSize: fontSize(12),
+    lineHeight: spacing(16),
+    maxWidth: ACTIVE_LABEL_WIDTH,
+    textAlign: "center",
+    textShadowColor: "rgba(11, 26, 56, 0.34)",
     textShadowOffset: { height: 1, width: 0 },
     textShadowRadius: spacing(5),
   },
   tabRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    flexDirection: "row",
     gap: TAB_ITEM_GAP,
+    height: "100%",
     zIndex: 2,
   },
   topGlassHighlight: {
     height: spacing(30),
     left: spacing(12),
-    position: 'absolute',
+    position: "absolute",
     right: spacing(12),
     top: spacing(2),
   },
