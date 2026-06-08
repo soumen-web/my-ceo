@@ -3,8 +3,9 @@ import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { GlassView, isGlassEffectAPIAvailable } from "expo-glass-effect";
 import { LinearGradient } from "expo-linear-gradient";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Platform, Pressable, StyleSheet, View } from "react-native";
+import { Platform, Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
 import Animated, {
+  Easing,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -19,7 +20,8 @@ import { fontSize, spacing } from "@/utils/scale";
 type TabRouteName = keyof AppTabParamList;
 
 const TAB_BAR_HEIGHT = spacing(66);
-const TAB_BAR_WIDTH = "88%";
+const TAB_BAR_WIDTH_RATIO = 0.88;
+const TAB_BAR_COLLAPSED_WIDTH_RATIO = 0.68;
 const TAB_ITEM_HEIGHT = spacing(50);
 const ACTIVE_CAPSULE_WIDTH = spacing(84);
 const ACTIVE_CAPSULE_COLLAPSED_WIDTH = spacing(40);
@@ -29,6 +31,7 @@ const ACTIVE_LABEL_GAP = spacing(5);
 const ACTIVE_LABEL_WIDTH = spacing(38);
 const TAB_ITEM_GAP = spacing(0);
 const ANIMATION_DURATION_MS = 240;
+const BAR_WIDTH_ANIMATION_DURATION_MS = 420;
 const LABEL_IDLE_TIMEOUT_MS = 15000;
 
 const glassPalette = {
@@ -96,9 +99,11 @@ const GlassTabItem = ({
   useEffect(() => {
     selectionProgress.value = withTiming(focused ? 1 : 0, {
       duration: reduceMotionEnabled ? 0 : ANIMATION_DURATION_MS,
+      easing: Easing.out(Easing.cubic),
     });
     labelProgress.value = withTiming(focused && labelVisible ? 1 : 0, {
       duration: reduceMotionEnabled ? 0 : ANIMATION_DURATION_MS,
+      easing: Easing.out(Easing.cubic),
     });
   }, [
     focused,
@@ -193,14 +198,32 @@ export const GlassTabBar = ({
   state,
 }: BottomTabBarProps) => {
   const safeAreaInsets = useSafeAreaInsets();
+  const reduceMotionEnabled = useReducedMotionPreference();
+  const { width: windowWidth } = useWindowDimensions();
   const [labelsVisible, setLabelsVisible] = useState(true);
   const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const barWidthProgress = useSharedValue(labelsVisible ? 1 : 0);
   const bottomInset = Math.max(
     insets.bottom,
     safeAreaInsets.bottom,
     spacing(10),
   );
   const glassAvailable = canUseGlassEffect();
+  const expandedBarWidth = windowWidth * TAB_BAR_WIDTH_RATIO;
+  const collapsedBarWidth = windowWidth * TAB_BAR_COLLAPSED_WIDTH_RATIO;
+
+  useEffect(() => {
+    barWidthProgress.value = withTiming(labelsVisible ? 1 : 0, {
+      duration: reduceMotionEnabled ? 0 : BAR_WIDTH_ANIMATION_DURATION_MS,
+      easing: Easing.out(Easing.cubic),
+    });
+  }, [barWidthProgress, labelsVisible, reduceMotionEnabled]);
+
+  const barAnimatedStyle = useAnimatedStyle(() => ({
+    width:
+      collapsedBarWidth +
+      (expandedBarWidth - collapsedBarWidth) * barWidthProgress.value,
+  }));
 
   const showLabelsTemporarily = useCallback(() => {
     if (idleTimerRef.current) {
@@ -302,9 +325,15 @@ export const GlassTabBar = ({
   );
 
   return (
-    <View
+    <Animated.View
       pointerEvents="box-none"
-      style={[styles.root, { paddingBottom: bottomInset }]}
+      style={[
+        styles.root,
+        barAnimatedStyle,
+        {
+          paddingBottom: bottomInset,
+        },
+      ]}
     >
       <View style={styles.glassShadow}>
         <View style={styles.glassFrame}>
@@ -322,7 +351,7 @@ export const GlassTabBar = ({
           {materialContent}
         </View>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -391,7 +420,6 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     bottom: spacing(4),
     position: "absolute",
-    width: TAB_BAR_WIDTH,
   },
   tabButton: {
     alignItems: "center",
