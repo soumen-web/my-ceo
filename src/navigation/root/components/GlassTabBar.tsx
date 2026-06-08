@@ -19,7 +19,7 @@ import { fontSize, spacing } from "@/utils/scale";
 type TabRouteName = keyof AppTabParamList;
 
 const TAB_BAR_HEIGHT = spacing(66);
-const TAB_HORIZONTAL_MARGIN = spacing(10);
+const TAB_HORIZONTAL_MARGIN = spacing(9);
 const TAB_ITEM_HEIGHT = spacing(50);
 const ACTIVE_CAPSULE_WIDTH = spacing(96);
 const ACTIVE_CAPSULE_HEIGHT = spacing(36);
