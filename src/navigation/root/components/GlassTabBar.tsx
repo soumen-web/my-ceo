@@ -19,11 +19,14 @@ import { fontSize, spacing } from "@/utils/scale";
 type TabRouteName = keyof AppTabParamList;
 
 const TAB_BAR_HEIGHT = spacing(66);
-const TAB_HORIZONTAL_MARGIN = spacing(26);
+const TAB_HORIZONTAL_MARGIN = spacing(10);
+const TAB_ITEM_HEIGHT = spacing(50);
+const ACTIVE_CAPSULE_WIDTH = spacing(96);
+const ACTIVE_CAPSULE_HEIGHT = spacing(36);
 const PILL_RADIUS = 999;
 const ACTIVE_LABEL_GAP = spacing(5);
-const ACTIVE_LABEL_WIDTH = spacing(44);
-const TAB_ITEM_GAP = spacing(2);
+const ACTIVE_LABEL_WIDTH = spacing(48);
+const TAB_ITEM_GAP = spacing(0);
 const ANIMATION_DURATION_MS = 240;
 
 const glassPalette = {
@@ -289,20 +292,19 @@ const styles = StyleSheet.create({
     textShadowRadius: spacing(6),
   },
   activeCapsule: {
+    alignSelf: "center",
     backgroundColor: "rgba(255, 255, 255, 0.13)",
     borderColor: "rgba(174, 224, 255, 0.42)",
     borderRadius: PILL_RADIUS,
     borderWidth: 1,
-    bottom: spacing(5),
-    left: spacing(7),
+    height: ACTIVE_CAPSULE_HEIGHT,
     overflow: "hidden",
     position: "absolute",
-    right: spacing(7),
     shadowColor: "rgba(74, 182, 255, 0.26)",
     shadowOffset: { height: spacing(8), width: 0 },
     shadowOpacity: 0.24,
     shadowRadius: spacing(16),
-    top: spacing(5),
+    width: ACTIVE_CAPSULE_WIDTH,
   },
   fallbackGlass: {
     backgroundColor: "rgba(3, 14, 27, 0.42)",
@@ -358,7 +360,7 @@ const styles = StyleSheet.create({
   tabButtonWrap: {
     borderRadius: PILL_RADIUS,
     flex: 1,
-    height: spacing(54),
+    height: TAB_ITEM_HEIGHT,
     minWidth: spacing(48),
     zIndex: 2,
   },
@@ -370,10 +372,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: PILL_RADIUS,
     flexDirection: "row",
-    height: spacing(54),
+    height: TAB_ITEM_HEIGHT,
     justifyContent: "center",
     overflow: "hidden",
-    paddingHorizontal: spacing(8),
+    paddingHorizontal: spacing(12),
   },
   labelClip: {
     alignItems: "center",
