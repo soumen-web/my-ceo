@@ -44,9 +44,9 @@ export const DashboardQuickActionList = ({
           >
             <LinearGradient
               colors={[
-                'rgba(255, 255, 255, 0.98)',
-                'rgba(236, 248, 255, 0.94)',
-                'rgba(204, 239, 255, 0.82)',
+                'rgba(255, 255, 255, 0.12)',
+                'rgba(15, 42, 73, 0.72)',
+                'rgba(74, 182, 255, 0.1)',
               ]}
               end={{ x: 1, y: 1 }}
               start={{ x: 0, y: 0 }}
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   iconFrame: {
     alignItems: 'center',
     backgroundColor: reactNativeColorScheme.ultiHuman.module.iconSurface,
-    borderColor: 'rgba(255, 255, 255, 0.74)',
+    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(999),
     borderWidth: 1,
     height: spacing(42),
@@ -116,8 +116,8 @@ const styles = StyleSheet.create({
   },
   item: {
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderColor: 'rgba(18, 46, 70, 0.34)',
+    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassPanel,
+    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(8),
     borderWidth: 1,
     elevation: 2,

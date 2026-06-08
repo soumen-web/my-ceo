@@ -50,9 +50,9 @@ export const BrandColors = {
 export const BrandEffects = {
   ultiHuman: {
     headerFadeColors: [
-      'rgba(255, 255, 255, 0.92)',
-      'rgba(255, 255, 255, 0.35)',
-      'rgba(255, 255, 255, 0)',
+      'rgba(2, 9, 20, 0.92)',
+      'rgba(6, 19, 33, 0.36)',
+      'rgba(6, 19, 33, 0)',
     ] as const,
     shadowColor: reactNativeColorScheme.slate[950],
   },

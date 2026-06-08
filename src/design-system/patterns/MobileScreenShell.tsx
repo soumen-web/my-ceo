@@ -17,14 +17,28 @@ import { useKeyboardBottomInset } from '@/design-system/hooks';
 import { reactNativeColorScheme } from '@/design-system/tokens/colors';
 import { radius, spacing } from '@/utils/scale';
 
-import { ResponsiveDecorativeOrb } from './ResponsiveDecorativeOrb';
 import { ScreenScaffold } from './ScreenScaffold';
 
 const mobileShellGradient = [
-  '#f3faff',
-  reactNativeColorScheme.ultiHuman.background,
-  '#d5f1ff',
-  '#b9dcff',
+  '#020914',
+  '#061321',
+  '#0a1d33',
+  '#122e46',
+] as const;
+
+const starField = [
+  { left: '8%', opacity: 0.3, size: 1, top: '9%' },
+  { left: '17%', opacity: 0.18, size: 1, top: '22%' },
+  { left: '27%', opacity: 0.34, size: 1.5, top: '12%' },
+  { left: '42%', opacity: 0.22, size: 1, top: '26%' },
+  { left: '56%', opacity: 0.32, size: 1, top: '8%' },
+  { left: '68%', opacity: 0.18, size: 1.5, top: '19%' },
+  { left: '79%', opacity: 0.28, size: 1, top: '11%' },
+  { left: '91%', opacity: 0.2, size: 1, top: '27%' },
+  { left: '12%', opacity: 0.18, size: 1, top: '48%' },
+  { left: '36%', opacity: 0.22, size: 1, top: '58%' },
+  { left: '63%', opacity: 0.16, size: 1, top: '44%' },
+  { left: '86%', opacity: 0.2, size: 1.5, top: '62%' },
 ] as const;
 
 interface MobileScreenShellProps {
@@ -76,7 +90,7 @@ export const MobileScreenShell = ({
       contentContainerStyle={styles.scaffoldContent}
       safeAreaStyle={styles.scaffoldSafeArea}
     >
-      <StatusBar backgroundColor={reactNativeColorScheme.ultiHuman.background} style="dark" />
+      <StatusBar backgroundColor={reactNativeColorScheme.ultiHuman.background} style="light" />
       <View style={styles.background}>
         <LinearGradient
           colors={mobileShellGradient}
@@ -84,26 +98,36 @@ export const MobileScreenShell = ({
           start={{ x: 0, y: 0 }}
           style={StyleSheet.absoluteFill}
         />
-        <ResponsiveDecorativeOrb
-          color={reactNativeColorScheme.ultiHuman.surface.glassFaint}
-          edge="right"
-          maxSize={240}
-          minSize={190}
-          overflowRatio={0.36}
-          sizeRatio={0.54}
-          verticalEdge="top"
-          verticalRatio={0.08}
+        <LinearGradient
+          colors={['rgba(74, 182, 255, 0.18)', 'rgba(74, 182, 255, 0.04)', 'rgba(74, 182, 255, 0)']}
+          end={{ x: 0.5, y: 1 }}
+          pointerEvents="none"
+          start={{ x: 0.5, y: 0 }}
+          style={styles.skyGlowTop}
         />
-        <ResponsiveDecorativeOrb
-          color="rgba(18, 46, 70, 0.12)"
-          edge="left"
-          maxSize={240}
-          minSize={190}
-          overflowRatio={0.32}
-          sizeRatio={0.54}
-          verticalEdge="bottom"
-          verticalRatio={0.1}
+        <LinearGradient
+          colors={['rgba(123, 204, 255, 0)', 'rgba(123, 204, 255, 0.1)', 'rgba(123, 204, 255, 0)']}
+          end={{ x: 1, y: 1 }}
+          pointerEvents="none"
+          start={{ x: 0, y: 0 }}
+          style={styles.skyGlowBottom}
         />
+        {starField.map((star) => (
+          <View
+            key={`${star.left}-${star.top}`}
+            pointerEvents="none"
+            style={[
+              styles.star,
+              {
+                height: star.size,
+                left: star.left,
+                opacity: star.opacity,
+                top: star.top,
+                width: star.size,
+              },
+            ]}
+          />
+        ))}
         <KeyboardAvoidingView
           behavior={keyboardAware && Platform.OS === 'ios' ? 'padding' : undefined}
           style={styles.keyboardContainer}
@@ -194,11 +218,30 @@ const styles = StyleSheet.create({
   scaffoldSafeArea: {
     backgroundColor: reactNativeColorScheme.ultiHuman.background,
   },
+  skyGlowBottom: {
+    bottom: -spacing(120),
+    height: spacing(360),
+    left: -spacing(80),
+    position: 'absolute',
+    right: -spacing(80),
+  },
+  skyGlowTop: {
+    height: spacing(260),
+    left: -spacing(70),
+    position: 'absolute',
+    right: -spacing(70),
+    top: -spacing(80),
+  },
   scrollContent: {
     paddingBottom: spacing(40),
   },
   staticContent: {
     flex: 1,
     paddingBottom: spacing(40),
+  },
+  star: {
+    backgroundColor: 'rgba(237, 248, 255, 0.88)',
+    borderRadius: 999,
+    position: 'absolute',
   },
 });

@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
   barTrack: {
     alignItems: 'center',
-    backgroundColor: 'rgba(18, 46, 70, 0.09)',
+    backgroundColor: 'rgba(255, 255, 255, 0.07)',
     borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(8),
     borderWidth: 1,
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     paddingTop: spacing(2),
   },
   chartPanel: {
-    backgroundColor: reactNativeColorScheme.ultiHuman.surface.raised,
+    backgroundColor: 'rgba(12, 31, 55, 0.78)',
     borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(8),
     borderWidth: 1,
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
   },
   emptyState: {
     alignItems: 'center',
-    backgroundColor: 'rgba(18, 46, 70, 0.08)',
+    backgroundColor: 'rgba(255, 255, 255, 0.07)',
     borderRadius: radius(8),
     gap: spacing(4),
     minHeight: spacing(156),
@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
     lineHeight: spacing(14),
   },
   presentMetric: {
-    backgroundColor: 'rgba(18, 46, 70, 0.14)',
+    backgroundColor: 'rgba(74, 182, 255, 0.12)',
   },
   presentSegment: {
     backgroundColor: chartColors.present,
@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
     lineHeight: spacing(17),
   },
   progressPanel: {
-    backgroundColor: 'rgba(255, 255, 255, 0.78)',
+    backgroundColor: 'rgba(12, 31, 55, 0.84)',
     borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(8),
     borderWidth: 1,
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
     padding: spacing(12),
   },
   progressTrack: {
-    backgroundColor: 'rgba(18, 46, 70, 0.13)',
+    backgroundColor: 'rgba(255, 255, 255, 0.12)',
     borderRadius: radius(8),
     height: spacing(10),
     overflow: 'hidden',
@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
   },
   rateBadge: {
     alignItems: 'center',
-    backgroundColor: 'rgba(18, 46, 70, 0.13)',
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
     borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderSoft,
     borderRadius: radius(8),
     borderWidth: 1,

@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     borderColor: reactNativeColorScheme.status.danger.border,
   },
   errorIconFrame: {
-    backgroundColor: 'rgba(255, 255, 255, 0.62)',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderColor: reactNativeColorScheme.status.danger.border,
   },
   errorText: {
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
   iconFrame: {
     alignItems: 'center',
-    backgroundColor: 'rgba(18, 46, 70, 0.12)',
+    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassSoft,
     borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(8),
     borderWidth: 1,

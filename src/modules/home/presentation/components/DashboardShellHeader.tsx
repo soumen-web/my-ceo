@@ -77,8 +77,8 @@ export const DashboardShellHeader = ({
 const styles = StyleSheet.create({
   avatar: {
     alignItems: 'center',
-    backgroundColor: 'rgba(18, 46, 70, 0.18)',
-    borderColor: 'rgba(18, 46, 70, 0.34)',
+    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassSoft,
+    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderWidth: 1,
     borderRadius: radius(17),
     height: spacing(34),
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.62)',
+    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassSoft,
     borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(8),
     borderWidth: 1,

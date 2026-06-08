@@ -46,9 +46,9 @@ export const DashboardStatCard = ({
     <View style={styles.shadowWrap}>
       <LinearGradient
         colors={[
-          'rgba(255, 255, 255, 0.46)',
-          'rgba(255, 255, 255, 0.2)',
-          'rgba(143, 200, 255, 0.16)',
+          'rgba(255, 255, 255, 0.18)',
+          'rgba(15, 42, 73, 0.88)',
+          'rgba(74, 182, 255, 0.16)',
         ]}
         end={{ x: 1, y: 1 }}
         start={{ x: 0, y: 0 }}
@@ -56,7 +56,7 @@ export const DashboardStatCard = ({
       >
         <View style={styles.topRow}>
           <View style={styles.iconFrame}>
-            <Feather color={reactNativeColorScheme.brand[700]} name={icon} size={17} />
+            <Feather color={reactNativeColorScheme.brand[300]} name={icon} size={17} />
           </View>
           <View style={styles.statusPill}>
             <Text adjustsFontSizeToFit minimumFontScale={0.72} numberOfLines={1} style={styles.statusValue}>
@@ -86,7 +86,7 @@ export const DashboardStatCard = ({
 const styles = StyleSheet.create({
   card: {
     alignItems: 'flex-start',
-    borderColor: 'rgba(255, 255, 255, 0.62)',
+    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorder,
     borderRadius: radius(18),
     borderWidth: 1,
     gap: spacing(10),
@@ -114,8 +114,8 @@ const styles = StyleSheet.create({
   },
   iconFrame: {
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.26)',
-    borderColor: 'rgba(255, 255, 255, 0.58)',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(999),
     borderWidth: 1,
     height: spacing(34),
@@ -140,14 +140,14 @@ const styles = StyleSheet.create({
     elevation: 4,
     shadowColor: reactNativeColorScheme.ultiHuman.surface.cardShadow,
     shadowOffset: { height: spacing(8), width: 0 },
-    shadowOpacity: 0.18,
+    shadowOpacity: 0.28,
     shadowRadius: spacing(16),
     width: '100%',
   },
   statusPill: {
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.34)',
-    borderColor: 'rgba(255, 255, 255, 0.58)',
+    backgroundColor: 'rgba(255, 255, 255, 0.12)',
+    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(999),
     borderWidth: 1,
     minWidth: spacing(48),
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing(5),
   },
   statusValue: {
-    color: reactNativeColorScheme.brand[700],
+    color: reactNativeColorScheme.brand[200],
     fontFamily: AppFonts.googleSansBold,
     fontSize: fontSize(12),
     lineHeight: spacing(16),

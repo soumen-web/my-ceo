@@ -149,7 +149,7 @@ export const DashboardSideMenu = (props: DrawerContentComponentProps) => {
   return (
     <View style={styles.drawer}>
       <LinearGradient
-        colors={['#f3faff', '#eef8ff', '#ffffff']}
+        colors={['#020914', '#061321', '#0a1d33']}
         end={{ x: 1, y: 1 }}
         start={{ x: 0, y: 0 }}
         style={styles.drawerGradient}
@@ -291,8 +291,8 @@ const styles = StyleSheet.create({
   },
   notificationButton: {
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.74)',
-    borderColor: 'rgba(190, 226, 245, 0.86)',
+    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassSoft,
+    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(8),
     borderWidth: 1,
     height: spacing(42),
@@ -319,8 +319,8 @@ const styles = StyleSheet.create({
   },
   drawerHeader: {
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.58)',
-    borderColor: 'rgba(190, 226, 245, 0.76)',
+    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassPanel,
+    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(8),
     borderWidth: 1,
     flexDirection: 'row',
@@ -347,8 +347,8 @@ const styles = StyleSheet.create({
     lineHeight: spacing(16),
   },
   footer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.48)',
-    borderTopColor: 'rgba(190, 226, 245, 0.74)',
+    backgroundColor: 'rgba(2, 9, 20, 0.34)',
+    borderTopColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderTopWidth: 1,
     marginTop: 'auto',
     paddingBottom: spacing(20),
@@ -367,8 +367,8 @@ const styles = StyleSheet.create({
   },
   iconFrame: {
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.82)',
-    borderColor: 'rgba(190, 226, 245, 0.84)',
+    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassSoft,
+    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(8),
     borderWidth: 1,
     height: spacing(42),
@@ -394,8 +394,8 @@ const styles = StyleSheet.create({
   },
   menuItem: {
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.62)',
-    borderColor: 'rgba(255, 255, 255, 0.78)',
+    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassPanel,
+    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderWidth: 1,
     borderRadius: radius(8),
     flexDirection: 'row',
@@ -404,8 +404,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing(10),
   },
   menuItemActive: {
-    backgroundColor: 'rgba(18, 46, 70, 0.2)',
-    borderColor: 'rgba(18, 46, 70, 0.42)',
+    backgroundColor: reactNativeColorScheme.ultiHuman.module.accentSoft,
+    borderColor: reactNativeColorScheme.ultiHuman.module.borderStrong,
     shadowColor: reactNativeColorScheme.ultiHuman.accent,
     shadowOffset: { height: spacing(8), width: 0 },
     shadowOpacity: 0.16,

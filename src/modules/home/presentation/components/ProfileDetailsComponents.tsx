@@ -443,9 +443,9 @@ export const ProfileActionChip = ({
   >
     <LinearGradient
       colors={[
-        'rgba(255, 255, 255, 0.98)',
-        'rgba(236, 248, 255, 0.94)',
-        'rgba(204, 239, 255, 0.82)',
+        'rgba(255, 255, 255, 0.12)',
+        'rgba(15, 42, 73, 0.72)',
+        'rgba(74, 182, 255, 0.1)',
       ]}
       end={{ x: 1, y: 1 }}
       start={{ x: 0, y: 0 }}
@@ -463,8 +463,8 @@ export const ProfileActionChip = ({
 const styles = StyleSheet.create({
   actionChip: {
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.88)',
-    borderColor: 'rgba(18, 46, 70, 0.34)',
+    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassPanel,
+    borderColor: moduleColors.border,
     borderRadius: radius(8),
     borderWidth: 1,
     flex: 1,
@@ -588,8 +588,8 @@ const styles = StyleSheet.create({
     gap: spacing(6),
   },
   fieldCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.88)',
-    borderColor: 'rgba(18, 46, 70, 0.34)',
+    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassPanel,
+    borderColor: moduleColors.border,
     borderRadius: radius(8),
     borderWidth: 1,
     gap: spacing(6),
@@ -836,8 +836,8 @@ const styles = StyleSheet.create({
     lineHeight: spacing(21),
   },
   secureFieldCard: {
-    backgroundColor: 'rgba(249, 255, 253, 0.94)',
-    borderColor: 'rgba(18, 46, 70, 0.42)',
+    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassPanel,
+    borderColor: moduleColors.borderStrong,
   },
   secureFieldAccent: {
     backgroundColor: moduleColors.icon,

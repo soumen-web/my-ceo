@@ -27,11 +27,11 @@ const TAB_ITEM_GAP = spacing(2);
 const ANIMATION_DURATION_MS = 240;
 
 const glassPalette = {
-  baseSurface: 'rgba(255, 255, 255, 0.12)',
-  blueRefraction: 'rgba(142, 200, 255, 0.1)',
-  inactiveText: 'rgba(67, 83, 108, 0.58)',
+  baseSurface: 'rgba(255, 255, 255, 0.14)',
+  blueRefraction: 'rgba(74, 182, 255, 0.08)',
+  inactiveText: 'rgba(200, 215, 230, 0.62)',
   innerStroke: 'rgba(255, 255, 255, 0.46)',
-  shadow: 'rgba(31, 70, 116, 0.18)',
+  shadow: 'rgba(0, 11, 24, 0.42)',
 };
 
 const iconByRoute: Record<TabRouteName, keyof typeof Feather.glyphMap> = {

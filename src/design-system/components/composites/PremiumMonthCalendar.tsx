@@ -280,8 +280,8 @@ const styles = StyleSheet.create({
   },
   calendarDayContent: {
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.72)',
-    borderColor: 'rgba(190, 226, 245, 0.54)',
+    backgroundColor: 'rgba(12, 31, 55, 0.78)',
+    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(8),
     borderWidth: 1,
     gap: spacing(2),
@@ -291,15 +291,15 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   calendarDayContentExcluded: {
-    backgroundColor: 'rgba(148, 163, 184, 0.08)',
+    backgroundColor: 'rgba(148, 163, 184, 0.14)',
   },
   calendarDayContentRange: {
     backgroundColor: 'transparent',
     borderColor: 'transparent',
   },
   calendarDayContentSelected: {
-    backgroundColor: moduleColors.selected,
-    borderColor: moduleColors.accent,
+    backgroundColor: reactNativeColorScheme.brand[500],
+    borderColor: reactNativeColorScheme.brand[300],
     borderRadius: radius(22),
     borderStyle: 'solid',
     shadowColor: moduleColors.accent,
@@ -323,10 +323,10 @@ const styles = StyleSheet.create({
     color: reactNativeColorScheme.text.disabled,
   },
   calendarDayTextExcluded: {
-    color: '#64748b',
+    color: reactNativeColorScheme.text.muted,
   },
   calendarDayTextSelected: {
-    color: reactNativeColorScheme.text.inverse,
+    color: reactNativeColorScheme.text.primary,
   },
   calendarGrid: {
     flexDirection: 'row',
@@ -346,9 +346,9 @@ const styles = StyleSheet.create({
     lineHeight: spacing(10),
   },
   calendarMiniLabelSelected: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassSoft,
     borderRadius: radius(5),
-    color: moduleColors.accentPressed,
+    color: reactNativeColorScheme.brand[200],
     overflow: 'hidden',
     paddingHorizontal: spacing(3),
   },
@@ -411,15 +411,15 @@ const styles = StyleSheet.create({
     width: spacing(28),
   },
   panel: {
-    backgroundColor: 'rgba(255, 255, 255, 0.66)',
-    borderColor: 'rgba(190, 226, 245, 0.68)',
+    backgroundColor: 'rgba(12, 31, 55, 0.82)',
+    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(8),
     borderWidth: 1,
     gap: spacing(14),
     padding: spacing(14),
     shadowColor: reactNativeColorScheme.ultiHuman.surface.cardShadow,
     shadowOffset: { height: spacing(10), width: 0 },
-    shadowOpacity: 0.11,
+    shadowOpacity: 0.28,
     shadowRadius: spacing(16),
   },
   panelHeader: {
@@ -457,8 +457,8 @@ const styles = StyleSheet.create({
     transform: [{ scale: 0.985 }],
   },
   rangeBridge: {
-    backgroundColor: 'rgba(18, 46, 70, 0.2)',
-    borderColor: 'rgba(18, 46, 70, 0.26)',
+    backgroundColor: 'rgba(74, 182, 255, 0.14)',
+    borderColor: 'rgba(174, 224, 255, 0.2)',
     borderWidth: 1,
     height: spacing(36),
     position: 'absolute',

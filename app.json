@@ -20,7 +20,7 @@
       "icon": "./src/assets/images/android-icon.png",
       "package": "com.webskitters.myceo",
       "adaptiveIcon": {
-        "backgroundColor": "#071c2e",
+        "backgroundColor": "#020914",
         "foregroundImage": "./src/assets/images/android-icon-foreground.png",
         "backgroundImage": "./src/assets/images/android-icon-background.png",
         "monochromeImage": "./src/assets/images/android-icon-monochrome.png"
@@ -39,9 +39,9 @@
           "image": "./src/assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#071c2e",
+          "backgroundColor": "#020914",
           "dark": {
-            "backgroundColor": "#071c2e"
+            "backgroundColor": "#020914"
           }
         }
       ]

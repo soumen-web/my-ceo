@@ -15,7 +15,7 @@ export const DashboardScreenIntro = ({
   role,
 }: DashboardScreenIntroProps) => (
   <LinearGradient
-    colors={['rgba(255,255,255,0.92)', 'rgba(236, 248, 255, 0.88)', 'rgba(204, 239, 255, 0.82)']}
+    colors={reactNativeColorScheme.ultiHuman.module.heroGradient}
     end={{ x: 1, y: 1 }}
     start={{ x: 0, y: 0 }}
     style={styles.intro}
@@ -38,8 +38,8 @@ export const DashboardScreenIntro = ({
 const styles = StyleSheet.create({
   badge: {
     alignSelf: 'flex-start',
-    backgroundColor: reactNativeColorScheme.ultiHuman.text,
-    borderColor: 'rgba(255, 255, 255, 0.7)',
+    backgroundColor: reactNativeColorScheme.ultiHuman.module.accentSoft,
+    borderColor: reactNativeColorScheme.ultiHuman.module.borderStrong,
     borderRadius: radius(8),
     borderWidth: 1,
     maxWidth: spacing(132),
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing(8),
   },
   badgeText: {
-    color: reactNativeColorScheme.text.inverse,
+    color: reactNativeColorScheme.ultiHuman.text,
     fontFamily: AppFonts.googleSansBold,
     fontSize: fontSize(12),
     lineHeight: spacing(16),
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
   intro: {
     alignItems: 'flex-start',
-    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorder,
+    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
     borderRadius: radius(8),
     borderWidth: 1,
     flexDirection: 'row',
