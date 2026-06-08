@@ -47,7 +47,10 @@ export const SignInScreen = ({ navigation }: SignInScreenProps) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigation.replace(ROUTES.appDrawer, { screen: ROUTES.home });
+      navigation.replace(ROUTES.appDrawer, {
+        params: { screen: ROUTES.tabHome },
+        screen: ROUTES.appTabs,
+      });
     }
   }, [isAuthenticated, navigation]);
 

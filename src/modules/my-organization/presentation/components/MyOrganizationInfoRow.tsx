@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   },
   row: {
     backgroundColor: 'rgba(255, 255, 255, 0.88)',
-    borderColor: 'rgba(42, 153, 213, 0.34)',
+    borderColor: 'rgba(59, 145, 234, 0.34)',
     borderRadius: radius(8),
     borderWidth: 1,
     gap: spacing(6),

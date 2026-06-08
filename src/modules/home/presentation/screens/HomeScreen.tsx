@@ -1,9 +1,11 @@
 import type { DrawerScreenProps } from '@react-navigation/drawer';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { StackActions } from '@react-navigation/native';
 import { useEffect, useMemo } from 'react';
 
 import { MobileScreenShell } from '@/design-system/patterns/MobileScreenShell';
-import { ROUTES, type AppDrawerParamList } from '@/navigation/route-types';
+import { ROUTES, type AppDrawerParamList, type AppTabParamList } from '@/navigation/route-types';
+import { getDrawerNavigation, openAppDrawer } from '@/navigation/utils/drawerNavigation';
 import { selectIsAuthenticated } from '@/store/slices/authSlice';
 import { useAppSelector } from '@/store/hooks';
 import { useScreenTelemetry } from '@services/observability/performance/useScreenTelemetry';
@@ -20,7 +22,9 @@ import { MonthlyAttendanceChart } from '../components/MonthlyAttendanceChart';
 import { useHomeScreenModel } from '../hooks/useHomeScreenModel';
 import type { DashboardQuickAction } from '../../domain/entities/HomeDashboard';
 
-type HomeScreenProps = DrawerScreenProps<AppDrawerParamList, 'Home'>;
+type HomeScreenProps =
+  | DrawerScreenProps<AppDrawerParamList, 'Home'>
+  | BottomTabScreenProps<AppTabParamList, 'TabHome'>;
 
 const getInitials = (value: string | undefined): string => {
   const nameParts = value?.trim().split(/\s+/).filter(Boolean) ?? [];
@@ -35,6 +39,7 @@ const isRoutableQuickAction = (action: DashboardQuickAction): boolean =>
   action.id === 'current-salary-slip';
 
 export const HomeScreen = ({ navigation }: HomeScreenProps) => {
+  const drawerNavigation = getDrawerNavigation(navigation);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const { dashboard, errorMessage, isRefreshing, refreshDashboard, status, user } =
     useHomeScreenModel();
@@ -53,13 +58,13 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigation.getParent()?.dispatch(StackActions.replace(ROUTES.signIn));
+      drawerNavigation?.getParent()?.dispatch(StackActions.replace(ROUTES.signIn));
     }
-  }, [isAuthenticated, navigation]);
+  }, [drawerNavigation, isAuthenticated]);
 
   const handleQuickActionPress = (action: DashboardQuickAction) => {
     if (action.id === 'daily-attendance') {
-      navigation.navigate(ROUTES.attendance, {
+      drawerNavigation?.navigate(ROUTES.attendance, {
         params: { returnToDashboard: true },
         screen: ROUTES.attendanceDailyTimeline,
       });
@@ -67,7 +72,7 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
     }
 
     if (action.id === 'apply-leave') {
-      navigation.navigate(ROUTES.leave, {
+      drawerNavigation?.navigate(ROUTES.leave, {
         params: { returnToDashboard: true },
         screen: ROUTES.leaveApply,
       });
@@ -75,7 +80,7 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
     }
 
     if (action.id === 'current-salary-slip') {
-      navigation.navigate(ROUTES.payroll, {
+      drawerNavigation?.navigate(ROUTES.payroll, {
         params: { returnToDashboard: true },
         screen: ROUTES.payrollDetail,
       });
@@ -87,8 +92,10 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
       header={
         <DashboardShellHeader
           initials={initials}
-          onMenuPress={() => navigation.openDrawer()}
-          onProfilePress={() => navigation.navigate(ROUTES.profileDetails)}
+          onMenuPress={() => openAppDrawer(navigation)}
+          onProfilePress={() =>
+            drawerNavigation?.navigate(ROUTES.appTabs, { screen: ROUTES.tabProfile })
+          }
           subtitle=""
           title={displayName}
         />

@@ -457,8 +457,8 @@ const styles = StyleSheet.create({
     transform: [{ scale: 0.985 }],
   },
   rangeBridge: {
-    backgroundColor: 'rgba(42, 153, 213, 0.2)',
-    borderColor: 'rgba(42, 153, 213, 0.26)',
+    backgroundColor: 'rgba(59, 145, 234, 0.2)',
+    borderColor: 'rgba(59, 145, 234, 0.26)',
     borderWidth: 1,
     height: spacing(36),
     position: 'absolute',

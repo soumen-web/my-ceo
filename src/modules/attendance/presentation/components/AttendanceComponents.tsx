@@ -46,7 +46,7 @@ const sky = '#5f8ef7';
 const statusColor: Record<AttendanceDayStatus, string> = {
   absent: coral,
   early: gold,
-  holiday: '#2a99d5',
+  holiday: '#3b91ea',
   late: '#f59f45',
   leave: sky,
   present: mint,
@@ -1343,7 +1343,7 @@ const styles = StyleSheet.create({
     paddingBottom: spacing(8),
   },
   timelineLine: {
-    backgroundColor: 'rgba(42, 153, 213, 0.16)',
+    backgroundColor: 'rgba(59, 145, 234, 0.16)',
     flex: 1,
     width: spacing(2),
   },

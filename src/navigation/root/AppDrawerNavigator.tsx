@@ -9,6 +9,7 @@ import { HrQueryScreen } from '@/modules/hr-query';
 import { NotificationsScreen } from '@/modules/notifications';
 import { ROUTES, type AppDrawerParamList } from '@/navigation/route-types';
 import { reactNativeColorScheme } from '@/design-system/tokens/colors';
+import { AppTabNavigator } from './AppTabNavigator';
 import { AttendanceStackNavigator } from './AttendanceStackNavigator';
 import { HrmsStackNavigator } from './HrmsStackNavigator';
 import { LeaveStackNavigator } from './LeaveStackNavigator';
@@ -20,6 +21,7 @@ const Drawer = createDrawerNavigator<AppDrawerParamList>();
 export const AppDrawerNavigator = () => (
   <Drawer.Navigator
     drawerContent={(props) => <DashboardSideMenu {...props} />}
+    initialRouteName={ROUTES.appTabs}
     screenOptions={{
       drawerStyle: {
         backgroundColor: reactNativeColorScheme.ultiHuman.background,
@@ -35,6 +37,7 @@ export const AppDrawerNavigator = () => (
       swipeEdgeWidth: 28,
     }}
   >
+    <Drawer.Screen component={AppTabNavigator} name={ROUTES.appTabs} />
     <Drawer.Screen component={HomeScreen} name={ROUTES.home} />
     <Drawer.Screen component={AttendanceStackNavigator} name={ROUTES.attendance} />
     <Drawer.Screen component={LeaveStackNavigator} name={ROUTES.leave} />

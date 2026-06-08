@@ -1,4 +1,3 @@
-import type { DrawerNavigationProp } from '@react-navigation/drawer';
 import type { NavigationProp } from '@react-navigation/native';
 import { StackActions } from '@react-navigation/native';
 import type { PropsWithChildren } from 'react';
@@ -12,9 +11,9 @@ import { toAuthenticatedUserViewModel, useAuthSession } from '@/modules/auth';
 import { DashboardShellHeader } from '@/modules/home/presentation/components/DashboardShellHeader';
 import {
   ROUTES,
-  type AppDrawerParamList,
   type MyOrganizationStackParamList,
 } from '@/navigation/route-types';
+import { getDrawerNavigation, openAppDrawer } from '@/navigation/utils/drawerNavigation';
 import { useAppSelector } from '@/store/hooks';
 import { selectIsAuthenticated } from '@/store/slices/authSlice';
 import { fontSize, spacing } from '@/utils/scale';
@@ -54,7 +53,7 @@ export const MyOrganizationScreenFrame = ({
   const userViewModel = toAuthenticatedUserViewModel(user);
   const displayName = userViewModel?.displayName ?? 'Employee';
   const initials = useMemo(() => getInitials(displayName), [displayName]);
-  const drawerNavigation = navigation.getParent<DrawerNavigationProp<AppDrawerParamList>>();
+  const drawerNavigation = getDrawerNavigation(navigation);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -68,7 +67,7 @@ export const MyOrganizationScreenFrame = ({
       return;
     }
 
-    drawerNavigation?.openDrawer();
+    openAppDrawer(navigation);
   };
 
   return (
@@ -79,7 +78,7 @@ export const MyOrganizationScreenFrame = ({
           leftAccessibilityLabel={isDetail ? 'Go back' : 'Open navigation menu'}
           leftIcon={isDetail ? 'arrow-left' : 'menu'}
           onMenuPress={handleLeftPress}
-          onProfilePress={() => drawerNavigation?.navigate(ROUTES.profileDetails)}
+          onProfilePress={() => drawerNavigation?.navigate(ROUTES.appTabs, { screen: ROUTES.tabProfile })}
         />
       }
       onRefresh={onRefresh}

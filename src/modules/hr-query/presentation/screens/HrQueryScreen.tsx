@@ -1,5 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import type { DrawerScreenProps } from '@react-navigation/drawer';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -30,13 +31,16 @@ import {
 } from '@/modules/hr-query/domain/entities/HrQuery';
 import { toAuthenticatedUserViewModel, useAuthSession } from '@/modules/auth';
 import { DashboardShellHeader } from '@/modules/home/presentation/components/DashboardShellHeader';
-import type { AppDrawerParamList } from '@/navigation/route-types';
+import type { AppDrawerParamList, AppTabParamList } from '@/navigation/route-types';
 import { ROUTES } from '@/navigation/route-types';
+import { getDrawerNavigation, openAppDrawer } from '@/navigation/utils/drawerNavigation';
 import { fontSize, radius, spacing } from '@/utils/scale';
 
 import { useHrQueryScreenModel } from '../hooks/useHrQueryScreenModel';
 
-type HrQueryScreenProps = DrawerScreenProps<AppDrawerParamList, 'HrQuery'>;
+type HrQueryScreenProps =
+  | DrawerScreenProps<AppDrawerParamList, 'HrQuery'>
+  | BottomTabScreenProps<AppTabParamList, 'TabMyDesk'>;
 type HrQueryTab = 'ask' | 'track';
 
 const moduleColors = reactNativeColorScheme.ultiHuman.module;
@@ -121,6 +125,7 @@ const priorityTone = (priority: HrQueryPriority) => {
 };
 
 export const HrQueryScreen = ({ navigation }: HrQueryScreenProps) => {
+  const drawerNavigation = getDrawerNavigation(navigation);
   const { bottomInset, keyboardVisible } = useKeyboardBottomInset({ extraOffset: spacing(16) });
   const { user } = useAuthSession();
   const userViewModel = toAuthenticatedUserViewModel(user);
@@ -215,8 +220,10 @@ export const HrQueryScreen = ({ navigation }: HrQueryScreenProps) => {
       header={
         <DashboardShellHeader
           initials={initialsFrom(displayName)}
-          onMenuPress={() => navigation.openDrawer()}
-          onProfilePress={() => navigation.navigate(ROUTES.profileDetails)}
+          onMenuPress={() => openAppDrawer(navigation)}
+          onProfilePress={() =>
+            drawerNavigation?.navigate(ROUTES.appTabs, { screen: ROUTES.tabProfile })
+          }
           subtitle=""
           title={displayName}
         />

@@ -1,4 +1,3 @@
-import type { DrawerNavigationProp } from '@react-navigation/drawer';
 import type { NavigationProp } from '@react-navigation/native';
 import type { PropsWithChildren } from 'react';
 import { useMemo } from 'react';
@@ -9,11 +8,9 @@ import { MobileScreenShell } from '@/design-system/patterns/MobileScreenShell';
 import { reactNativeColorScheme } from '@/design-system/tokens/colors';
 import { toAuthenticatedUserViewModel, useAuthSession } from '@/modules/auth';
 import { DashboardShellHeader } from '@/modules/home/presentation/components/DashboardShellHeader';
-import type {
-  AttendanceStackParamList,
-  AppDrawerParamList,
-} from '@/navigation/route-types';
+import type { AttendanceStackParamList } from '@/navigation/route-types';
 import { ROUTES } from '@/navigation/route-types';
+import { getDrawerNavigation, openAppDrawer } from '@/navigation/utils/drawerNavigation';
 import { fontSize, spacing } from '@/utils/scale';
 
 type AttendanceNavigation = NavigationProp<AttendanceStackParamList>;
@@ -51,11 +48,11 @@ export const AttendanceScreenFrame = ({
     () => initialsFrom(userViewModel?.displayName ?? 'Employee'),
     [userViewModel?.displayName],
   );
-  const drawerNavigation = navigation.getParent<DrawerNavigationProp<AppDrawerParamList>>();
+  const drawerNavigation = getDrawerNavigation(navigation);
 
   const handleLeftPress = () => {
     if (returnToDashboard) {
-      drawerNavigation?.navigate(ROUTES.home);
+      drawerNavigation?.navigate(ROUTES.appTabs, { screen: ROUTES.tabHome });
       return;
     }
 
@@ -64,7 +61,7 @@ export const AttendanceScreenFrame = ({
       return;
     }
 
-    drawerNavigation?.openDrawer();
+    openAppDrawer(navigation);
   };
 
   return (
@@ -75,7 +72,7 @@ export const AttendanceScreenFrame = ({
           leftAccessibilityLabel={isDetail ? 'Go back' : 'Open navigation menu'}
           leftIcon={isDetail ? 'arrow-left' : 'menu'}
           onMenuPress={handleLeftPress}
-          onProfilePress={() => drawerNavigation?.navigate(ROUTES.profileDetails)}
+          onProfilePress={() => drawerNavigation?.navigate(ROUTES.appTabs, { screen: ROUTES.tabProfile })}
         />
       }
       onRefresh={onRefresh}

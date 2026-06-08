@@ -63,7 +63,10 @@ export const VerifyOtpScreen = ({ navigation, route }: VerifyOtpScreenProps) => 
         console.info('[Auth Navigation] OTP verified, navigating to Dashboard');
       }
 
-      navigation.replace(ROUTES.appDrawer, { screen: ROUTES.home });
+      navigation.replace(ROUTES.appDrawer, {
+        params: { screen: ROUTES.tabHome },
+        screen: ROUTES.appTabs,
+      });
     }
   }, [isAuthenticated, navigation]);
 

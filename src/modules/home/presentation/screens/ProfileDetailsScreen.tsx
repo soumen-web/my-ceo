@@ -1,11 +1,17 @@
 import type { DrawerScreenProps } from '@react-navigation/drawer';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { StackActions } from '@react-navigation/native';
 import { useCallback, useEffect, useMemo } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { MobileScreenShell } from '@/design-system/patterns/MobileScreenShell';
 import type { HrmsEmployeeProfile, HrmsSelfServiceItem, HrmsStatusTone } from '@/modules/hrms';
-import { ROUTES, type AppDrawerParamList } from '@/navigation/route-types';
+import {
+  ROUTES,
+  type AppDrawerParamList,
+  type AppTabParamList,
+} from '@/navigation/route-types';
+import { getDrawerNavigation, openAppDrawer } from '@/navigation/utils/drawerNavigation';
 import { usePermission } from '@/services/access-control/usePermission';
 import { observabilityEvents } from '@/services/observability/events';
 import { useScreenTelemetry } from '@/services/observability/performance/useScreenTelemetry';
@@ -31,7 +37,9 @@ import {
   VerificationSummaryCard,
 } from '../components/ProfileDetailsComponents';
 
-type ProfileDetailsScreenProps = DrawerScreenProps<AppDrawerParamList, 'ProfileDetails'>;
+type ProfileDetailsScreenProps =
+  | DrawerScreenProps<AppDrawerParamList, 'ProfileDetails'>
+  | BottomTabScreenProps<AppTabParamList, 'TabProfile'>;
 
 const looksLikeOpaqueId = (value: string): boolean =>
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value) ||
@@ -253,6 +261,7 @@ const buildSections = (
   ].filter((section) => section.rows.length > 0) as ProfileDetailSectionModel[];
 
 export const ProfileDetailsScreen = ({ navigation }: ProfileDetailsScreenProps) => {
+  const drawerNavigation = getDrawerNavigation(navigation);
   const dispatch = useAppDispatch();
   const canViewOrganizationEmployees = usePermission('employee:view:org');
   const errorMessage = useAppSelector(selectHrmsErrorMessage);
@@ -277,9 +286,9 @@ export const ProfileDetailsScreen = ({ navigation }: ProfileDetailsScreenProps) 
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigation.getParent()?.dispatch(StackActions.replace(ROUTES.signIn));
+      drawerNavigation?.getParent()?.dispatch(StackActions.replace(ROUTES.signIn));
     }
-  }, [isAuthenticated, navigation]);
+  }, [drawerNavigation, isAuthenticated]);
 
   const refreshProfile = useCallback(() => {
     dispatch(loadHrmsSelfServiceRequested({ canViewOrganizationEmployees }));
@@ -296,7 +305,7 @@ export const ProfileDetailsScreen = ({ navigation }: ProfileDetailsScreenProps) 
       header={
         <DashboardShellHeader
           initials={initials}
-          onMenuPress={() => navigation.openDrawer()}
+          onMenuPress={() => openAppDrawer(navigation)}
           subtitle="Profile"
           title={displayName}
         />
@@ -330,13 +339,13 @@ export const ProfileDetailsScreen = ({ navigation }: ProfileDetailsScreenProps) 
         <ProfileActionChip
           icon="briefcase"
           label="Work"
-          onPress={() => navigation.navigate(ROUTES.workforceHub)}
+          onPress={() => drawerNavigation?.navigate(ROUTES.appTabs, { screen: ROUTES.tabVision })}
         />
         <ProfileActionChip
           icon="users"
           label="Team"
           onPress={() =>
-            navigation.navigate(ROUTES.myOrganization, {
+            drawerNavigation?.navigate(ROUTES.myOrganization, {
               screen: ROUTES.myTeam,
             })
           }
@@ -345,7 +354,7 @@ export const ProfileDetailsScreen = ({ navigation }: ProfileDetailsScreenProps) 
           icon="map-pin"
           label="Location"
           onPress={() =>
-            navigation.navigate(ROUTES.myOrganization, {
+            drawerNavigation?.navigate(ROUTES.myOrganization, {
               screen: ROUTES.myWorkLocation,
             })
           }

@@ -7,6 +7,21 @@ export const linkingConfig: LinkingOptions<RootStackParamList> = {
     screens: {
       AppDrawer: {
         screens: {
+          AppTabs: {
+            path: 'tabs',
+            screens: {
+              TabHome: 'home',
+              TabMyDesk: 'mydesk',
+              TabProfile: 'profile',
+              TabVision: {
+                path: 'vision',
+                screens: {
+                  WorkforceHubDetail: ':section',
+                  WorkforceHubOverview: '',
+                },
+              },
+            },
+          },
           WorkforceHub: {
             path: 'dashboard/workforce-hub',
             screens: {

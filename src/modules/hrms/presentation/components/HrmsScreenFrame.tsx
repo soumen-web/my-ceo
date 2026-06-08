@@ -1,4 +1,3 @@
-import type { DrawerNavigationProp } from '@react-navigation/drawer';
 import type { NavigationProp } from '@react-navigation/native';
 import { StackActions } from '@react-navigation/native';
 import type { PropsWithChildren } from 'react';
@@ -12,9 +11,9 @@ import { toAuthenticatedUserViewModel, useAuthSession } from '@/modules/auth';
 import { DashboardShellHeader } from '@/modules/home/presentation/components/DashboardShellHeader';
 import {
   ROUTES,
-  type AppDrawerParamList,
   type HrmsStackParamList,
 } from '@/navigation/route-types';
+import { getDrawerNavigation, openAppDrawer } from '@/navigation/utils/drawerNavigation';
 import { useAppSelector } from '@/store/hooks';
 import { selectIsAuthenticated } from '@/store/slices/authSlice';
 import { fontSize, spacing } from '@/utils/scale';
@@ -56,7 +55,7 @@ export const HrmsScreenFrame = ({
     () => getInitials(userViewModel?.displayName ?? 'Employee'),
     [userViewModel?.displayName],
   );
-  const drawerNavigation = navigation.getParent<DrawerNavigationProp<AppDrawerParamList>>();
+  const drawerNavigation = getDrawerNavigation(navigation);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -70,7 +69,7 @@ export const HrmsScreenFrame = ({
       return;
     }
 
-    drawerNavigation?.openDrawer();
+    openAppDrawer(navigation);
   };
 
   return (
@@ -81,7 +80,7 @@ export const HrmsScreenFrame = ({
           leftAccessibilityLabel={isDetail ? 'Go back' : 'Open navigation menu'}
           leftIcon={isDetail ? 'arrow-left' : 'menu'}
           onMenuPress={handleLeftPress}
-          onProfilePress={() => drawerNavigation?.navigate(ROUTES.profileDetails)}
+          onProfilePress={() => drawerNavigation?.navigate(ROUTES.appTabs, { screen: ROUTES.tabProfile })}
         />
       }
       onRefresh={onRefresh}

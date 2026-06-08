@@ -24,7 +24,7 @@ const mobileShellGradient = [
   '#f3faff',
   reactNativeColorScheme.ultiHuman.background,
   '#d5f1ff',
-  '#b7e4f8',
+  '#b9dcff',
 ] as const;
 
 interface MobileScreenShellProps {
@@ -95,7 +95,7 @@ export const MobileScreenShell = ({
           verticalRatio={0.08}
         />
         <ResponsiveDecorativeOrb
-          color="rgba(42, 153, 213, 0.12)"
+          color="rgba(59, 145, 234, 0.12)"
           edge="left"
           maxSize={240}
           minSize={190}

@@ -31,6 +31,7 @@ interface DrawerMenuItem {
 }
 
 const routeToActiveItem: Partial<Record<keyof AppDrawerParamList, MenuItem>> = {
+  AppTabs: 'dashboard',
   Attendance: 'attendance',
   Home: 'dashboard',
   HrQuery: 'hrQuery',
@@ -189,7 +190,12 @@ export const DashboardSideMenu = (props: DrawerContentComponentProps) => {
           <Pressable
             accessibilityLabel="Open Dashboard"
             accessibilityRole="button"
-            onPress={() => navigateAndClose(ROUTES.home)}
+            onPress={() => {
+              props.navigation.navigate(ROUTES.appTabs, {
+                screen: ROUTES.tabHome,
+              });
+              closeDrawer();
+            }}
             style={({ pressed }) => [
               styles.menuItem,
               activeItem === 'dashboard' ? styles.menuItemActive : undefined,
@@ -398,8 +404,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing(10),
   },
   menuItemActive: {
-    backgroundColor: 'rgba(42, 153, 213, 0.2)',
-    borderColor: 'rgba(42, 153, 213, 0.42)',
+    backgroundColor: 'rgba(59, 145, 234, 0.2)',
+    borderColor: 'rgba(59, 145, 234, 0.42)',
     shadowColor: reactNativeColorScheme.ultiHuman.accent,
     shadowOffset: { height: spacing(8), width: 0 },
     shadowOpacity: 0.16,

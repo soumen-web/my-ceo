@@ -4,6 +4,7 @@ import type { HrmsSelfServiceSection } from '@/modules/hrms/domain/entities/Hrms
 
 export const ROUTES = {
   appDrawer: 'AppDrawer',
+  appTabs: 'AppTabs',
   attendance: 'Attendance',
   home: 'Home',
   hrQuery: 'HrQuery',
@@ -27,6 +28,10 @@ export const ROUTES = {
   profileDetails: 'ProfileDetails',
   signIn: 'SignIn',
   splash: 'Splash',
+  tabHome: 'TabHome',
+  tabMyDesk: 'TabMyDesk',
+  tabProfile: 'TabProfile',
+  tabVision: 'TabVision',
   verifyOtp: 'VerifyOtp',
   attendanceAnalytics: 'AttendanceAnalytics',
   attendanceDailyTimeline: 'AttendanceDailyTimeline',
@@ -87,7 +92,15 @@ export type PayrollStackParamList = {
   PayrollHome: undefined;
 };
 
+export type AppTabParamList = {
+  TabHome: undefined;
+  TabMyDesk: undefined;
+  TabProfile: undefined;
+  TabVision: NavigatorScreenParams<HrmsStackParamList> | undefined;
+};
+
 export type AppDrawerParamList = {
+  AppTabs: NavigatorScreenParams<AppTabParamList> | undefined;
   Attendance: NavigatorScreenParams<AttendanceStackParamList> | undefined;
   Home: undefined;
   HrQuery: undefined;
