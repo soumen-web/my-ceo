@@ -1,0 +1,128 @@
+import type { DrawerScreenProps } from '@react-navigation/drawer';
+import { StackActions } from '@react-navigation/native';
+import { useEffect, useMemo } from 'react';
+
+import { MobileScreenShell } from '@/design-system/patterns/MobileScreenShell';
+import { ROUTES, type AppDrawerParamList } from '@/navigation/route-types';
+import { selectIsAuthenticated } from '@/store/slices/authSlice';
+import { useAppSelector } from '@/store/hooks';
+import { useScreenTelemetry } from '@services/observability/performance/useScreenTelemetry';
+import { observabilityEvents } from '@services/observability/events';
+
+import { DashboardFeedbackCard } from '../components/DashboardFeedbackCard';
+import { DashboardInsightList } from '../components/DashboardInsightList';
+import { DashboardQuickActionList } from '../components/DashboardQuickActionList';
+import { DashboardScreenIntro } from '../components/DashboardScreenIntro';
+import { DashboardSection } from '../components/DashboardSection';
+import { DashboardShellHeader } from '../components/DashboardShellHeader';
+import { DashboardStatGrid } from '../components/DashboardStatGrid';
+import { MonthlyAttendanceChart } from '../components/MonthlyAttendanceChart';
+import { useHomeScreenModel } from '../hooks/useHomeScreenModel';
+import type { DashboardQuickAction } from '../../domain/entities/HomeDashboard';
+
+type HomeScreenProps = DrawerScreenProps<AppDrawerParamList, 'Home'>;
+
+const getInitials = (value: string | undefined): string => {
+  const nameParts = value?.trim().split(/\s+/).filter(Boolean) ?? [];
+  const initials = nameParts.slice(0, 2).map((part) => part[0]).join('');
+
+  return initials ? initials.toUpperCase() : 'U';
+};
+
+const isRoutableQuickAction = (action: DashboardQuickAction): boolean =>
+  action.id === 'daily-attendance' ||
+  action.id === 'apply-leave' ||
+  action.id === 'current-salary-slip';
+
+export const HomeScreen = ({ navigation }: HomeScreenProps) => {
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const { dashboard, errorMessage, isRefreshing, refreshDashboard, status, user } =
+    useHomeScreenModel();
+  const displayName = user?.displayName ?? 'Employee';
+  const initials = useMemo(() => getInitials(displayName), [displayName]);
+  const chartData = useMemo(
+    () => dashboard.attendanceByMonth,
+    [dashboard.attendanceByMonth],
+  );
+  const quickActions = useMemo(
+    () => dashboard.quickActions.filter(isRoutableQuickAction),
+    [dashboard.quickActions],
+  );
+
+  useScreenTelemetry('Home', observabilityEvents.screenHomeViewed);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigation.getParent()?.dispatch(StackActions.replace(ROUTES.signIn));
+    }
+  }, [isAuthenticated, navigation]);
+
+  const handleQuickActionPress = (action: DashboardQuickAction) => {
+    if (action.id === 'daily-attendance') {
+      navigation.navigate(ROUTES.attendance, {
+        params: { returnToDashboard: true },
+        screen: ROUTES.attendanceDailyTimeline,
+      });
+      return;
+    }
+
+    if (action.id === 'apply-leave') {
+      navigation.navigate(ROUTES.leave, {
+        params: { returnToDashboard: true },
+        screen: ROUTES.leaveApply,
+      });
+      return;
+    }
+
+    if (action.id === 'current-salary-slip') {
+      navigation.navigate(ROUTES.payroll, {
+        params: { returnToDashboard: true },
+        screen: ROUTES.payrollDetail,
+      });
+    }
+  };
+
+  return (
+    <MobileScreenShell
+      header={
+        <DashboardShellHeader
+          initials={initials}
+          onMenuPress={() => navigation.openDrawer()}
+          onProfilePress={() => navigation.navigate(ROUTES.profileDetails)}
+          subtitle=""
+          title={displayName}
+        />
+      }
+      onRefresh={refreshDashboard}
+      refreshing={isRefreshing}
+    >
+      <DashboardScreenIntro
+        displayName={displayName}
+        role={dashboard.employee.role}
+      />
+
+      <DashboardStatGrid stats={dashboard.stats} />
+
+      <MonthlyAttendanceChart data={chartData} />
+
+      <DashboardSection title="Quick Actions">
+        <DashboardQuickActionList
+          actions={quickActions}
+          onActionPress={handleQuickActionPress}
+        />
+      </DashboardSection>
+
+      <DashboardSection title="Updates">
+        {status === 'loading' ? (
+          <DashboardFeedbackCard message="Refreshing your workspace..." tone="loading" />
+        ) : errorMessage ? (
+          <DashboardFeedbackCard message={errorMessage} tone="error" />
+        ) : dashboard.notes.length ? (
+          <DashboardInsightList notes={dashboard.notes} />
+        ) : (
+          <DashboardFeedbackCard message="No updates yet." />
+        )}
+      </DashboardSection>
+    </MobileScreenShell>
+  );
+};
