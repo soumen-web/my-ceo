@@ -10,87 +10,82 @@ interface DashboardShellHeaderProps {
   initials: string;
   leftAccessibilityLabel?: string;
   leftIcon?: keyof typeof Feather.glyphMap;
-  onMenuPress: () => void;
-  onProfilePress?: () => void;
+  navigationTitle?: string;
+  onMenuPress?: () => void;
+  onNotificationPress?: () => void;
   subtitle?: string;
   title?: string;
 }
 
 export const DashboardShellHeader = ({
-  initials,
   leftAccessibilityLabel = 'Open navigation menu',
   leftIcon = 'menu',
+  navigationTitle,
   onMenuPress,
-  onProfilePress,
+  onNotificationPress,
   subtitle = 'Human operations hub',
   title = 'MyCEO',
-}: DashboardShellHeaderProps) => (
-  <View style={styles.header}>
-    <Pressable
-      accessibilityLabel={leftAccessibilityLabel}
-      accessibilityRole="button"
-      onPress={onMenuPress}
-      style={({ pressed }) => [
-        styles.iconButton,
-        pressed ? styles.pressed : undefined,
-      ]}
-    >
-      <Feather color={reactNativeColorScheme.ultiHuman.accentPressed} name={leftIcon} size={22} />
-    </Pressable>
+}: DashboardShellHeaderProps) => {
+  const isBackHeader = Boolean(onMenuPress && leftIcon === 'arrow-left');
+  const displayTitle = isBackHeader ? (navigationTitle ?? title) : title;
+  const displaySubtitle = isBackHeader ? '' : subtitle;
 
-    <UltiHumanLogo size="sm" variant="mark" />
-
-    <View style={[styles.titleGroup, !subtitle ? styles.titleGroupSingleLine : undefined]}>
-      <Text
-        numberOfLines={1}
-        style={[styles.headerTitle, !subtitle ? styles.headerTitleSingleLine : undefined]}
-      >
-        {title}
-      </Text>
-      {subtitle ? (
-        <Text numberOfLines={1} style={styles.headerSubtitle}>
-          {subtitle}
-        </Text>
+  return (
+    <View style={styles.header}>
+      {onMenuPress ? (
+        <Pressable
+          accessibilityLabel={leftAccessibilityLabel}
+          accessibilityRole="button"
+          onPress={onMenuPress}
+          style={({ pressed }) => [
+            styles.iconButton,
+            pressed ? styles.pressed : undefined,
+          ]}
+        >
+          <Feather color={reactNativeColorScheme.ultiHuman.accentPressed} name={leftIcon} size={22} />
+        </Pressable>
       ) : null}
-    </View>
 
-    <View style={styles.rightActions}>
-      <Pressable
-        accessibilityLabel="Open profile details"
-        accessibilityRole="button"
-        accessibilityState={onProfilePress ? undefined : { disabled: true }}
-        disabled={!onProfilePress}
-        onPress={onProfilePress}
-        style={({ pressed }) => [
-          styles.profileButton,
-          pressed ? styles.pressed : undefined,
-        ]}
-      >
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>{initials}</Text>
-        </View>
-      </Pressable>
+      {isBackHeader ? null : <UltiHumanLogo size="sm" variant="mark" />}
+
+      <View style={[styles.titleGroup, !displaySubtitle ? styles.titleGroupSingleLine : undefined]}>
+        <Text
+          numberOfLines={1}
+          style={[
+            styles.headerTitle,
+            !displaySubtitle ? styles.headerTitleSingleLine : undefined,
+            isBackHeader ? styles.navigationTitle : undefined,
+          ]}
+        >
+          {displayTitle}
+        </Text>
+        {displaySubtitle ? (
+          <Text numberOfLines={1} style={styles.headerSubtitle}>
+            {displaySubtitle}
+          </Text>
+        ) : null}
+      </View>
+
+      <View style={styles.rightActions}>
+        <Pressable
+          accessibilityLabel="Open notifications"
+          accessibilityRole="button"
+          accessibilityState={onNotificationPress ? undefined : { disabled: true }}
+          disabled={!onNotificationPress}
+          onPress={onNotificationPress}
+          style={({ pressed }) => [
+            styles.notificationButton,
+            pressed ? styles.pressed : undefined,
+          ]}
+        >
+          <Feather color={reactNativeColorScheme.ultiHuman.accentPressed} name="bell" size={20} />
+        </Pressable>
+      </View>
     </View>
-  </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
-  avatar: {
-    alignItems: 'center',
-    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassSoft,
-    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
-    borderWidth: 1,
-    borderRadius: radius(17),
-    height: spacing(34),
-    justifyContent: 'center',
-    width: spacing(34),
-  },
-  avatarText: {
-    color: reactNativeColorScheme.ultiHuman.accentPressed,
-    fontFamily: AppFonts.googleSansBold,
-    fontSize: fontSize(11),
-    lineHeight: spacing(15),
-  },
   header: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -127,12 +122,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: spacing(44),
   },
+  navigationTitle: {
+    fontSize: fontSize(18),
+  },
   pressed: {
     opacity: 0.72,
     transform: [{ scale: 0.98 }],
   },
-  profileButton: {
+  notificationButton: {
     alignItems: 'center',
+    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassSoft,
+    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
+    borderRadius: radius(17),
+    borderWidth: 1,
     height: spacing(44),
     justifyContent: 'center',
     width: spacing(44),

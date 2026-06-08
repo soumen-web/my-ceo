@@ -1,6 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import type { DrawerScreenProps } from '@react-navigation/drawer';
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -31,16 +32,17 @@ import {
 } from '@/modules/hr-query/domain/entities/HrQuery';
 import { toAuthenticatedUserViewModel, useAuthSession } from '@/modules/auth';
 import { DashboardShellHeader } from '@/modules/home/presentation/components/DashboardShellHeader';
-import type { AppDrawerParamList, AppTabParamList } from '@/navigation/route-types';
+import type { AppDrawerParamList, AppTabParamList, MyDeskStackParamList } from '@/navigation/route-types';
 import { ROUTES } from '@/navigation/route-types';
-import { getDrawerNavigation, openAppDrawer } from '@/navigation/utils/drawerNavigation';
+import { getDrawerNavigation } from '@/navigation/utils/drawerNavigation';
 import { fontSize, radius, spacing } from '@/utils/scale';
 
 import { useHrQueryScreenModel } from '../hooks/useHrQueryScreenModel';
 
 type HrQueryScreenProps =
   | DrawerScreenProps<AppDrawerParamList, 'HrQuery'>
-  | BottomTabScreenProps<AppTabParamList, 'TabMyDesk'>;
+  | BottomTabScreenProps<AppTabParamList, 'TabMyDesk'>
+  | NativeStackScreenProps<MyDeskStackParamList, 'HrQuery'>;
 type HrQueryTab = 'ask' | 'track';
 
 const moduleColors = reactNativeColorScheme.ultiHuman.module;
@@ -220,12 +222,18 @@ export const HrQueryScreen = ({ navigation }: HrQueryScreenProps) => {
       header={
         <DashboardShellHeader
           initials={initialsFrom(displayName)}
-          onMenuPress={() => openAppDrawer(navigation)}
-          onProfilePress={() =>
-            drawerNavigation?.navigate(ROUTES.appTabs, { screen: ROUTES.tabProfile })
+          leftAccessibilityLabel="Go back"
+          leftIcon="arrow-left"
+          navigationTitle="HR Query"
+          onMenuPress={navigation.canGoBack() ? () => navigation.goBack() : undefined}
+          onNotificationPress={() =>
+            drawerNavigation?.navigate(ROUTES.appTabs, {
+              params: { screen: ROUTES.notifications },
+              screen: ROUTES.tabMyDesk,
+            })
           }
           subtitle=""
-          title={displayName}
+          title={`Hello ${displayName}`}
         />
       }
       scrollEnabled={false}

@@ -11,7 +11,59 @@ export const linkingConfig: LinkingOptions<RootStackParamList> = {
             path: 'tabs',
             screens: {
               TabHome: 'home',
-              TabMyDesk: 'mydesk',
+              TabMyDesk: {
+                path: 'mydesk',
+                screens: {
+                  Attendance: {
+                    path: 'attendance',
+                    screens: {
+                      AttendanceAnalytics: 'analytics',
+                      AttendanceDailyTimeline: 'daily',
+                      AttendanceDetail: 'detail',
+                      AttendanceHistory: 'history',
+                      AttendanceHome: '',
+                    },
+                  },
+                  HrQuery: 'hr-query',
+                  Leave: {
+                    path: 'leave',
+                    screens: {
+                      LeaveAnalytics: 'analytics',
+                      LeaveApply: 'apply',
+                      LeaveDetail: 'detail/:leaveId',
+                      LeaveHistory: 'history',
+                      LeaveHome: '',
+                    },
+                  },
+                  MyDeskHome: '',
+                  MyOrganization: {
+                    path: 'my-organization',
+                    screens: {
+                      MyOrganizationInfo: 'info',
+                      MyOrganizationOverview: '',
+                      MyReportingManager: 'reporting-manager',
+                      MyTeam: 'team',
+                      MyWorkLocation: 'work-location',
+                      MyWorkMode: 'work-mode',
+                    },
+                  },
+                  Notifications: 'notifications',
+                  Payroll: {
+                    path: 'payroll',
+                    screens: {
+                      PayrollDetail: 'cycle/:cycleId',
+                      PayrollHome: '',
+                    },
+                  },
+                  WorkforceHub: {
+                    path: 'workforce-hub',
+                    screens: {
+                      WorkforceHubDetail: ':section',
+                      WorkforceHubOverview: '',
+                    },
+                  },
+                },
+              },
               TabProfile: 'profile',
               TabVision: {
                 path: 'vision',
@@ -22,45 +74,6 @@ export const linkingConfig: LinkingOptions<RootStackParamList> = {
               },
             },
           },
-          WorkforceHub: {
-            path: 'dashboard/workforce-hub',
-            screens: {
-              WorkforceHubDetail: ':section',
-              WorkforceHubOverview: '',
-            },
-          },
-          Home: 'home',
-          HrQuery: 'dashboard/hr-query',
-          Leave: {
-            path: 'dashboard/leave',
-            screens: {
-              LeaveAnalytics: 'analytics',
-              LeaveApply: 'apply',
-              LeaveDetail: 'detail/:leaveId',
-              LeaveHistory: 'history',
-              LeaveHome: '',
-            },
-          },
-          Payroll: {
-            path: 'dashboard/payroll',
-            screens: {
-              PayrollDetail: 'cycle/:cycleId',
-              PayrollHome: '',
-            },
-          },
-          MyOrganization: {
-            path: 'dashboard/my-organization',
-            screens: {
-              MyOrganizationOverview: '',
-              MyOrganizationInfo: 'info',
-              MyReportingManager: 'reporting-manager',
-              MyTeam: 'team',
-              MyWorkLocation: 'work-location',
-              MyWorkMode: 'work-mode',
-            },
-          },
-          Notifications: 'dashboard/notifications',
-          ProfileDetails: 'profile',
         },
       },
       SignIn: 'sign-in',

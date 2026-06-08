@@ -5,7 +5,7 @@ import { useEffect, useMemo } from 'react';
 
 import { MobileScreenShell } from '@/design-system/patterns/MobileScreenShell';
 import { ROUTES, type AppDrawerParamList, type AppTabParamList } from '@/navigation/route-types';
-import { getDrawerNavigation, openAppDrawer } from '@/navigation/utils/drawerNavigation';
+import { getDrawerNavigation } from '@/navigation/utils/drawerNavigation';
 import { selectIsAuthenticated } from '@/store/slices/authSlice';
 import { useAppSelector } from '@/store/hooks';
 import { useScreenTelemetry } from '@services/observability/performance/useScreenTelemetry';
@@ -64,25 +64,37 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
   const handleQuickActionPress = (action: DashboardQuickAction) => {
     if (action.id === 'daily-attendance') {
-      drawerNavigation?.navigate(ROUTES.attendance, {
-        params: { returnToDashboard: true },
-        screen: ROUTES.attendanceDailyTimeline,
+      drawerNavigation?.navigate(ROUTES.appTabs, {
+        params: {
+          params: {
+            params: { returnToDashboard: true },
+            screen: ROUTES.attendanceDailyTimeline,
+          },
+          screen: ROUTES.attendance,
+        },
+        screen: ROUTES.tabMyDesk,
       });
       return;
     }
 
     if (action.id === 'apply-leave') {
-      drawerNavigation?.navigate(ROUTES.leave, {
-        params: { returnToDashboard: true },
-        screen: ROUTES.leaveApply,
+      drawerNavigation?.navigate(ROUTES.appTabs, {
+        params: {
+          params: { params: { returnToDashboard: true }, screen: ROUTES.leaveApply },
+          screen: ROUTES.leave,
+        },
+        screen: ROUTES.tabMyDesk,
       });
       return;
     }
 
     if (action.id === 'current-salary-slip') {
-      drawerNavigation?.navigate(ROUTES.payroll, {
-        params: { returnToDashboard: true },
-        screen: ROUTES.payrollDetail,
+      drawerNavigation?.navigate(ROUTES.appTabs, {
+        params: {
+          params: { params: { returnToDashboard: true }, screen: ROUTES.payrollDetail },
+          screen: ROUTES.payroll,
+        },
+        screen: ROUTES.tabMyDesk,
       });
     }
   };
@@ -92,12 +104,14 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
       header={
         <DashboardShellHeader
           initials={initials}
-          onMenuPress={() => openAppDrawer(navigation)}
-          onProfilePress={() =>
-            drawerNavigation?.navigate(ROUTES.appTabs, { screen: ROUTES.tabProfile })
+          onNotificationPress={() =>
+            drawerNavigation?.navigate(ROUTES.appTabs, {
+              params: { screen: ROUTES.notifications },
+              screen: ROUTES.tabMyDesk,
+            })
           }
           subtitle=""
-          title={displayName}
+          title={`Hello ${displayName}`}
         />
       }
       onRefresh={refreshDashboard}

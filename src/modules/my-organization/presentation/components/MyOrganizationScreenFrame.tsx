@@ -13,7 +13,7 @@ import {
   ROUTES,
   type MyOrganizationStackParamList,
 } from '@/navigation/route-types';
-import { getDrawerNavigation, openAppDrawer } from '@/navigation/utils/drawerNavigation';
+import { getDrawerNavigation } from '@/navigation/utils/drawerNavigation';
 import { useAppSelector } from '@/store/hooks';
 import { selectIsAuthenticated } from '@/store/slices/authSlice';
 import { fontSize, spacing } from '@/utils/scale';
@@ -67,18 +67,27 @@ export const MyOrganizationScreenFrame = ({
       return;
     }
 
-    openAppDrawer(navigation);
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
   };
+  const showsBackButton = isDetail || navigation.canGoBack();
 
   return (
     <MobileScreenShell
       header={
         <DashboardShellHeader
           initials={initials}
-          leftAccessibilityLabel={isDetail ? 'Go back' : 'Open navigation menu'}
-          leftIcon={isDetail ? 'arrow-left' : 'menu'}
-          onMenuPress={handleLeftPress}
-          onProfilePress={() => drawerNavigation?.navigate(ROUTES.appTabs, { screen: ROUTES.tabProfile })}
+          leftAccessibilityLabel="Go back"
+          leftIcon="arrow-left"
+          navigationTitle={title}
+          onMenuPress={showsBackButton ? handleLeftPress : undefined}
+          onNotificationPress={() =>
+            drawerNavigation?.navigate(ROUTES.appTabs, {
+              params: { screen: ROUTES.notifications },
+              screen: ROUTES.tabMyDesk,
+            })
+          }
         />
       }
       onRefresh={onRefresh}

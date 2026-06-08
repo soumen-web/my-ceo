@@ -1,4 +1,4 @@
-import type { DrawerScreenProps } from '@react-navigation/drawer';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   RefreshControl,
   SectionList,
@@ -14,7 +14,7 @@ import type {
   NotificationSection,
 } from '@/modules/notifications/domain/entities/Notification';
 import { DashboardShellHeader } from '@/modules/home/presentation/components/DashboardShellHeader';
-import type { AppDrawerParamList } from '@/navigation/route-types';
+import type { MyDeskStackParamList } from '@/navigation/route-types';
 import { ROUTES } from '@/navigation/route-types';
 import { spacing } from '@/utils/scale';
 
@@ -30,7 +30,10 @@ import {
 } from '../components/NotificationComponents';
 import { useNotificationsScreenModel } from '../hooks/useNotificationsScreenModel';
 
-type NotificationsScreenProps = DrawerScreenProps<AppDrawerParamList, 'Notifications'>;
+type NotificationsScreenProps = NativeStackScreenProps<
+  MyDeskStackParamList,
+  'Notifications'
+>;
 
 const initialsFrom = (value: string | undefined): string => {
   const parts = value?.trim().split(/\s+/).filter(Boolean) ?? [];
@@ -96,10 +99,12 @@ export const NotificationsScreen = ({ navigation }: NotificationsScreenProps) =>
       header={
         <DashboardShellHeader
           initials={initialsFrom(displayName)}
-          onMenuPress={() => navigation.openDrawer()}
-          onProfilePress={() => navigation.navigate(ROUTES.profileDetails)}
+          leftAccessibilityLabel="Go back"
+          leftIcon="arrow-left"
+          navigationTitle="Notifications"
+          onMenuPress={navigation.canGoBack() ? () => navigation.goBack() : undefined}
           subtitle=""
-          title={displayName}
+          title={`Hello ${displayName}`}
         />
       }
       scrollEnabled={false}

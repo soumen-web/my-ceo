@@ -1,10 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { HomeScreen, ProfileDetailsScreen } from '@modules/home';
-import { HrQueryScreen } from '@/modules/hr-query';
 import { ROUTES, type AppTabParamList } from '@/navigation/route-types';
 
 import { HrmsStackNavigator } from './HrmsStackNavigator';
+import { MyDeskStackNavigator } from './MyDeskStackNavigator';
 import { GlassTabBar, getGlassTabBarHeight } from './components/GlassTabBar';
 
 const Tab = createBottomTabNavigator<AppTabParamList>();
@@ -41,7 +41,7 @@ export const AppTabNavigator = () => (
       options={{ tabBarAccessibilityLabel: 'Vision tab', tabBarLabel: 'Vision' }}
     />
     <Tab.Screen
-      component={HrQueryScreen}
+      component={MyDeskStackNavigator}
       name={ROUTES.tabMyDesk}
       options={{ tabBarAccessibilityLabel: 'MyDesk tab', tabBarLabel: 'MyDesk' }}
     />

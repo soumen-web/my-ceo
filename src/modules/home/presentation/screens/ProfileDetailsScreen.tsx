@@ -11,7 +11,7 @@ import {
   type AppDrawerParamList,
   type AppTabParamList,
 } from '@/navigation/route-types';
-import { getDrawerNavigation, openAppDrawer } from '@/navigation/utils/drawerNavigation';
+import { getDrawerNavigation } from '@/navigation/utils/drawerNavigation';
 import { usePermission } from '@/services/access-control/usePermission';
 import { observabilityEvents } from '@/services/observability/events';
 import { useScreenTelemetry } from '@/services/observability/performance/useScreenTelemetry';
@@ -305,9 +305,14 @@ export const ProfileDetailsScreen = ({ navigation }: ProfileDetailsScreenProps) 
       header={
         <DashboardShellHeader
           initials={initials}
-          onMenuPress={() => openAppDrawer(navigation)}
+          onNotificationPress={() =>
+            drawerNavigation?.navigate(ROUTES.appTabs, {
+              params: { screen: ROUTES.notifications },
+              screen: ROUTES.tabMyDesk,
+            })
+          }
           subtitle="Profile"
-          title={displayName}
+          title={`Hello ${displayName}`}
         />
       }
       onRefresh={refreshProfile}
@@ -345,8 +350,12 @@ export const ProfileDetailsScreen = ({ navigation }: ProfileDetailsScreenProps) 
           icon="users"
           label="Team"
           onPress={() =>
-            drawerNavigation?.navigate(ROUTES.myOrganization, {
-              screen: ROUTES.myTeam,
+            drawerNavigation?.navigate(ROUTES.appTabs, {
+              params: {
+                params: { screen: ROUTES.myTeam },
+                screen: ROUTES.myOrganization,
+              },
+              screen: ROUTES.tabMyDesk,
             })
           }
         />
@@ -354,8 +363,12 @@ export const ProfileDetailsScreen = ({ navigation }: ProfileDetailsScreenProps) 
           icon="map-pin"
           label="Location"
           onPress={() =>
-            drawerNavigation?.navigate(ROUTES.myOrganization, {
-              screen: ROUTES.myWorkLocation,
+            drawerNavigation?.navigate(ROUTES.appTabs, {
+              params: {
+                params: { screen: ROUTES.myWorkLocation },
+                screen: ROUTES.myOrganization,
+              },
+              screen: ROUTES.tabMyDesk,
             })
           }
         />

@@ -15,6 +15,7 @@ export const ROUTES = {
   leaveHistory: 'LeaveHistory',
   leaveHome: 'LeaveHome',
   myOrganization: 'MyOrganization',
+  myDeskHome: 'MyDeskHome',
   myOrganizationOverview: 'MyOrganizationOverview',
   myOrganizationInfo: 'MyOrganizationInfo',
   myReportingManager: 'MyReportingManager',
@@ -92,9 +93,20 @@ export type PayrollStackParamList = {
   PayrollHome: undefined;
 };
 
+export type MyDeskStackParamList = {
+  Attendance: NavigatorScreenParams<AttendanceStackParamList> | undefined;
+  HrQuery: undefined;
+  Leave: NavigatorScreenParams<LeaveStackParamList> | undefined;
+  MyDeskHome: undefined;
+  MyOrganization: NavigatorScreenParams<MyOrganizationStackParamList> | undefined;
+  Notifications: undefined;
+  Payroll: NavigatorScreenParams<PayrollStackParamList> | undefined;
+  WorkforceHub: NavigatorScreenParams<HrmsStackParamList> | undefined;
+};
+
 export type AppTabParamList = {
   TabHome: undefined;
-  TabMyDesk: undefined;
+  TabMyDesk: NavigatorScreenParams<MyDeskStackParamList> | undefined;
   TabProfile: undefined;
   TabVision: NavigatorScreenParams<HrmsStackParamList> | undefined;
 };

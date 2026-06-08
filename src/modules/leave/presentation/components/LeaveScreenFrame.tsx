@@ -10,7 +10,7 @@ import { toAuthenticatedUserViewModel, useAuthSession } from '@/modules/auth';
 import { DashboardShellHeader } from '@/modules/home/presentation/components/DashboardShellHeader';
 import type { LeaveStackParamList } from '@/navigation/route-types';
 import { ROUTES } from '@/navigation/route-types';
-import { getDrawerNavigation, openAppDrawer } from '@/navigation/utils/drawerNavigation';
+import { getDrawerNavigation } from '@/navigation/utils/drawerNavigation';
 import { fontSize, spacing } from '@/utils/scale';
 
 type LeaveNavigation = NavigationProp<LeaveStackParamList>;
@@ -65,18 +65,27 @@ export const LeaveScreenFrame = ({
       return;
     }
 
-    openAppDrawer(navigation);
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
   };
+  const showsBackButton = isDetail || returnToDashboard || navigation.canGoBack();
 
   return (
     <MobileScreenShell
       header={
         <DashboardShellHeader
           initials={initials}
-          leftAccessibilityLabel={isDetail ? 'Go back' : 'Open navigation menu'}
-          leftIcon={isDetail ? 'arrow-left' : 'menu'}
-          onMenuPress={handleLeftPress}
-          onProfilePress={() => drawerNavigation?.navigate(ROUTES.appTabs, { screen: ROUTES.tabProfile })}
+          leftAccessibilityLabel="Go back"
+          leftIcon="arrow-left"
+          navigationTitle={title}
+          onMenuPress={showsBackButton ? handleLeftPress : undefined}
+          onNotificationPress={() =>
+            drawerNavigation?.navigate(ROUTES.appTabs, {
+              params: { screen: ROUTES.notifications },
+              screen: ROUTES.tabMyDesk,
+            })
+          }
         />
       }
       keyboardAware={keyboardAware}
