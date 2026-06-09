@@ -221,7 +221,16 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
           </View>
         ) : null}
 
-        <View style={styles.composer}>
+        <LinearGradient
+          colors={[
+            'rgba(16, 51, 91, 0.94)',
+            'rgba(9, 32, 62, 0.9)',
+            'rgba(5, 22, 43, 0.92)',
+          ]}
+          end={{ x: 1, y: 1 }}
+          start={{ x: 0, y: 0 }}
+          style={styles.composer}
+        >
           <Animated.View
             pointerEvents="none"
             style={[styles.composerGlow, composerGlowAnimatedStyle]}
@@ -258,23 +267,6 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
           />
 
           <PremiumPressable
-            accessibilityLabel="Choose Wexa response speed"
-            accessibilityRole="button"
-            pressScale={0.98}
-            style={({ pressed }) => [
-              styles.instantButton,
-              pressed ? styles.pressed : undefined,
-            ]}
-          >
-            <Text style={styles.instantText}>Instant</Text>
-            <Feather
-              color="rgba(255, 255, 255, 0.64)"
-              name="chevron-down"
-              size={spacing(13)}
-            />
-          </PremiumPressable>
-
-          <PremiumPressable
             accessibilityLabel="Record voice prompt"
             accessibilityRole="button"
             pressScale={0.94}
@@ -303,21 +295,17 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
               pressed ? styles.pressed : undefined,
             ]}
           >
-            <View style={styles.waveBars}>
-              {[8, 15, 20, 13, 9].map((height, index) => (
-                <View
-                  key={`${height}-${index}`}
-                  style={[
-                    styles.waveBar,
-                    {
-                      height: spacing(height),
-                    },
-                  ]}
-                />
-              ))}
-            </View>
+            <Feather
+              color={
+                canSubmit
+                  ? reactNativeColorScheme.text.inverse
+                  : reactNativeColorScheme.text.disabled
+              }
+              name="arrow-up"
+              size={spacing(22)}
+            />
           </PremiumPressable>
-        </View>
+        </LinearGradient>
       </View>
     </MobileScreenShell>
   );
@@ -395,12 +383,11 @@ const styles = StyleSheet.create({
   },
   composer: {
     alignItems: 'center',
-    backgroundColor: reactNativeColorScheme.ultiHuman.inputGlassSurface,
     borderColor: reactNativeColorScheme.ultiHuman.glassBorder,
     borderRadius: radius(999),
-    borderWidth: StyleSheet.hairlineWidth,
+    borderWidth: 1,
     flexDirection: 'row',
-    gap: spacing(8),
+    gap: spacing(7),
     minHeight: spacing(50),
     overflow: 'hidden',
     paddingLeft: spacing(6),
@@ -408,16 +395,16 @@ const styles = StyleSheet.create({
     paddingVertical: spacing(4),
     shadowColor: reactNativeColorScheme.ultiHuman.surface.cardShadow,
     shadowOffset: { height: spacing(8), width: 0 },
-    shadowOpacity: 0.28,
-    shadowRadius: spacing(16),
+    shadowOpacity: 0.34,
+    shadowRadius: spacing(20),
   },
   composerGlow: {
-    backgroundColor: 'rgba(74, 182, 255, 0.1)',
-    bottom: -spacing(10),
-    left: spacing(50),
+    backgroundColor: 'rgba(123, 204, 255, 0.08)',
+    bottom: -spacing(18),
+    left: spacing(20),
     position: 'absolute',
-    right: spacing(68),
-    top: -spacing(10),
+    right: spacing(20),
+    top: -spacing(18),
   },
   composerWrap: {
     width: '100%',
@@ -463,20 +450,6 @@ const styles = StyleSheet.create({
     paddingVertical: spacing(8),
     flex: 1,
   },
-  instantButton: {
-    alignItems: 'center',
-    borderRadius: radius(999),
-    flexDirection: 'row',
-    gap: spacing(4),
-    minHeight: spacing(36),
-    paddingHorizontal: spacing(5),
-  },
-  instantText: {
-    color: reactNativeColorScheme.text.secondary,
-    fontFamily: AppFonts.googleSansMedium,
-    fontSize: fontSize(12),
-    lineHeight: spacing(16),
-  },
   menuItemPressed: {
     backgroundColor: reactNativeColorScheme.ultiHuman.surface.glass,
   },
@@ -489,16 +462,16 @@ const styles = StyleSheet.create({
   },
   plusButton: {
     alignItems: 'center',
-    backgroundColor: reactNativeColorScheme.ultiHuman.glassSurface,
-    borderColor: reactNativeColorScheme.ultiHuman.glassBorder,
-    borderWidth: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.055)',
+    borderColor: 'rgba(174, 224, 255, 0.22)',
+    borderWidth: StyleSheet.hairlineWidth,
     borderRadius: radius(999),
     height: spacing(40),
     justifyContent: 'center',
     width: spacing(40),
   },
   plusButtonActive: {
-    backgroundColor: reactNativeColorScheme.ultiHuman.inputGlassSurface,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
   pressed: {
     opacity: 0.84,
@@ -515,16 +488,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     paddingBottom: spacing(82),
-  },
-  waveBar: {
-    backgroundColor: '#161616',
-    borderRadius: radius(99),
-    width: spacing(3),
-  },
-  waveBars: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: spacing(2),
   },
   waveButton: {
     alignItems: 'center',
