@@ -32,7 +32,7 @@ export const ROUTES = {
   tabHome: 'TabHome',
   tabMyDesk: 'TabMyDesk',
   tabProfile: 'TabProfile',
-  tabVision: 'TabVision',
+  tabWexa: 'TabWexa',
   verifyOtp: 'VerifyOtp',
   attendanceAnalytics: 'AttendanceAnalytics',
   attendanceDailyTimeline: 'AttendanceDailyTimeline',
@@ -108,7 +108,7 @@ export type AppTabParamList = {
   TabHome: undefined;
   TabMyDesk: NavigatorScreenParams<MyDeskStackParamList> | undefined;
   TabProfile: undefined;
-  TabVision: NavigatorScreenParams<HrmsStackParamList> | undefined;
+  TabWexa: undefined;
 };
 
 export type AppDrawerParamList = {

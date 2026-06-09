@@ -49,14 +49,14 @@ const iconByRoute: Record<TabRouteName, keyof typeof Feather.glyphMap> = {
   TabHome: "home",
   TabMyDesk: "briefcase",
   TabProfile: "user",
-  TabVision: "book-open",
+  TabWexa: "command",
 };
 
 const labelByRoute: Record<TabRouteName, string> = {
   TabHome: "Home",
   TabMyDesk: "MyDesk",
   TabProfile: "Profile",
-  TabVision: "Vision",
+  TabWexa: "Wexa",
 };
 
 const canUseGlassEffect = () => {

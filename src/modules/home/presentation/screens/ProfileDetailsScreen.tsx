@@ -344,7 +344,7 @@ export const ProfileDetailsScreen = ({ navigation }: ProfileDetailsScreenProps) 
         <ProfileActionChip
           icon="briefcase"
           label="Work"
-          onPress={() => drawerNavigation?.navigate(ROUTES.appTabs, { screen: ROUTES.tabVision })}
+          onPress={() => drawerNavigation?.navigate(ROUTES.appTabs, { screen: ROUTES.tabWexa })}
         />
         <ProfileActionChip
           icon="users"

@@ -65,13 +65,7 @@ export const linkingConfig: LinkingOptions<RootStackParamList> = {
                 },
               },
               TabProfile: 'profile',
-              TabVision: {
-                path: 'vision',
-                screens: {
-                  WorkforceHubDetail: ':section',
-                  WorkforceHubOverview: '',
-                },
-              },
+              TabWexa: 'wexa',
             },
           },
         },

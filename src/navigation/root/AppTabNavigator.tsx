@@ -1,9 +1,9 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { HomeScreen, ProfileDetailsScreen } from '@modules/home';
+import { WexaScreen } from '@/modules/wexa';
 import { ROUTES, type AppTabParamList } from '@/navigation/route-types';
 
-import { HrmsStackNavigator } from './HrmsStackNavigator';
 import { MyDeskStackNavigator } from './MyDeskStackNavigator';
 import { GlassTabBar, getGlassTabBarHeight } from './components/GlassTabBar';
 
@@ -36,9 +36,9 @@ export const AppTabNavigator = () => (
       options={{ tabBarAccessibilityLabel: 'Home tab', tabBarLabel: 'Home' }}
     />
     <Tab.Screen
-      component={HrmsStackNavigator}
-      name={ROUTES.tabVision}
-      options={{ tabBarAccessibilityLabel: 'Vision tab', tabBarLabel: 'Vision' }}
+      component={WexaScreen}
+      name={ROUTES.tabWexa}
+      options={{ tabBarAccessibilityLabel: 'Wexa tab', tabBarLabel: 'Wexa' }}
     />
     <Tab.Screen
       component={MyDeskStackNavigator}
