@@ -10,6 +10,7 @@ import {
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 
 import { PremiumAnimatedView, premiumMotionTiming } from '@/design-system/components';
@@ -17,28 +18,10 @@ import { useKeyboardBottomInset } from '@/design-system/hooks';
 import { reactNativeColorScheme } from '@/design-system/tokens/colors';
 import { radius, spacing } from '@/utils/scale';
 
-import { ScreenScaffold } from './ScreenScaffold';
-
 const mobileShellGradient = [
-  '#020914',
-  '#061321',
-  '#0a1d33',
-  '#122e46',
-] as const;
-
-const starField = [
-  { left: '8%', opacity: 0.3, size: 1, top: '9%' },
-  { left: '17%', opacity: 0.18, size: 1, top: '22%' },
-  { left: '27%', opacity: 0.34, size: 1.5, top: '12%' },
-  { left: '42%', opacity: 0.22, size: 1, top: '26%' },
-  { left: '56%', opacity: 0.32, size: 1, top: '8%' },
-  { left: '68%', opacity: 0.18, size: 1.5, top: '19%' },
-  { left: '79%', opacity: 0.28, size: 1, top: '11%' },
-  { left: '91%', opacity: 0.2, size: 1, top: '27%' },
-  { left: '12%', opacity: 0.18, size: 1, top: '48%' },
-  { left: '36%', opacity: 0.22, size: 1, top: '58%' },
-  { left: '63%', opacity: 0.16, size: 1, top: '44%' },
-  { left: '86%', opacity: 0.2, size: 1.5, top: '62%' },
+  reactNativeColorScheme.ultiHuman.backgroundGradientStart,
+  reactNativeColorScheme.ultiHuman.backgroundGradientMiddle,
+  reactNativeColorScheme.ultiHuman.backgroundGradientEnd,
 ] as const;
 
 interface MobileScreenShellProps {
@@ -85,49 +68,17 @@ export const MobileScreenShell = ({
   }, [keyboardAware, keyboardVisible]);
 
   return (
-    <ScreenScaffold
-      bottomPadding={0}
-      contentContainerStyle={styles.scaffoldContent}
-      safeAreaStyle={styles.scaffoldSafeArea}
+    <LinearGradient
+      colors={mobileShellGradient}
+      end={{ x: 1, y: 1 }}
+      start={{ x: 0, y: 0 }}
+      style={styles.rootGradient}
     >
-      <StatusBar backgroundColor={reactNativeColorScheme.ultiHuman.background} style="light" />
-      <View style={styles.background}>
-        <LinearGradient
-          colors={mobileShellGradient}
-          end={{ x: 1, y: 0.95 }}
-          start={{ x: 0, y: 0 }}
-          style={StyleSheet.absoluteFill}
-        />
-        <LinearGradient
-          colors={['rgba(74, 182, 255, 0.18)', 'rgba(74, 182, 255, 0.04)', 'rgba(74, 182, 255, 0)']}
-          end={{ x: 0.5, y: 1 }}
-          pointerEvents="none"
-          start={{ x: 0.5, y: 0 }}
-          style={styles.skyGlowTop}
-        />
-        <LinearGradient
-          colors={['rgba(123, 204, 255, 0)', 'rgba(123, 204, 255, 0.1)', 'rgba(123, 204, 255, 0)']}
-          end={{ x: 1, y: 1 }}
-          pointerEvents="none"
-          start={{ x: 0, y: 0 }}
-          style={styles.skyGlowBottom}
-        />
-        {starField.map((star) => (
-          <View
-            key={`${star.left}-${star.top}`}
-            pointerEvents="none"
-            style={[
-              styles.star,
-              {
-                height: star.size,
-                left: star.left,
-                opacity: star.opacity,
-                top: star.top,
-                width: star.size,
-              },
-            ]}
-          />
-        ))}
+      <StatusBar backgroundColor="transparent" style="light" translucent />
+      <SafeAreaView
+        edges={['top', 'right', 'left', 'bottom']}
+        style={styles.safeArea}
+      >
         <KeyboardAvoidingView
           behavior={keyboardAware && Platform.OS === 'ios' ? 'padding' : undefined}
           style={styles.keyboardContainer}
@@ -139,7 +90,9 @@ export const MobileScreenShell = ({
                 bounces={scrollBounces}
                 contentContainerStyle={[
                   styles.scrollContent,
-                  androidKeyboardPadding ? { paddingBottom: spacing(40) + androidKeyboardPadding } : null,
+                  androidKeyboardPadding
+                    ? { paddingBottom: spacing(40) + androidKeyboardPadding }
+                    : null,
                   contentContainerStyle,
                 ]}
                 keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
@@ -180,16 +133,12 @@ export const MobileScreenShell = ({
             )}
           </View>
         </KeyboardAvoidingView>
-      </View>
-    </ScreenScaffold>
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    minHeight: '100%',
-  },
   container: {
     flex: 1,
     gap: spacing(12),
@@ -210,27 +159,11 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: spacing(18),
   },
-  scaffoldContent: {
-    backgroundColor: reactNativeColorScheme.ultiHuman.background,
+  rootGradient: {
     flex: 1,
-    paddingBottom: 0,
   },
-  scaffoldSafeArea: {
-    backgroundColor: reactNativeColorScheme.ultiHuman.background,
-  },
-  skyGlowBottom: {
-    bottom: -spacing(120),
-    height: spacing(360),
-    left: -spacing(80),
-    position: 'absolute',
-    right: -spacing(80),
-  },
-  skyGlowTop: {
-    height: spacing(260),
-    left: -spacing(70),
-    position: 'absolute',
-    right: -spacing(70),
-    top: -spacing(80),
+  safeArea: {
+    flex: 1,
   },
   scrollContent: {
     paddingBottom: spacing(40),
@@ -238,10 +171,5 @@ const styles = StyleSheet.create({
   staticContent: {
     flex: 1,
     paddingBottom: spacing(40),
-  },
-  star: {
-    backgroundColor: 'rgba(237, 248, 255, 0.88)',
-    borderRadius: 999,
-    position: 'absolute',
   },
 });

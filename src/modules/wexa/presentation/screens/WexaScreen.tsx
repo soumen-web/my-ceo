@@ -144,9 +144,9 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
         <View style={styles.aiOrb}>
           <LinearGradient
             colors={[
-              '#3a3a3a',
-              '#262626',
-              '#171717',
+              reactNativeColorScheme.ultiHuman.glassSurface,
+              reactNativeColorScheme.ultiHuman.inputGlassSurface,
+              reactNativeColorScheme.ultiHuman.tabGlassSurface,
             ]}
             style={StyleSheet.absoluteFill}
           />
@@ -341,8 +341,8 @@ const styles = StyleSheet.create({
   attachmentPill: {
     alignItems: 'center',
     alignSelf: 'flex-start',
-    backgroundColor: '#333333',
-    borderColor: '#3f3f3f',
+    backgroundColor: reactNativeColorScheme.ultiHuman.glassSurface,
+    borderColor: reactNativeColorScheme.ultiHuman.glassBorder,
     borderRadius: radius(99),
     borderWidth: 1,
     flexDirection: 'row',
@@ -354,8 +354,8 @@ const styles = StyleSheet.create({
   },
   attachmentMenu: {
     alignSelf: 'flex-start',
-    backgroundColor: '#333333',
-    borderColor: '#3f3f3f',
+    backgroundColor: reactNativeColorScheme.ultiHuman.inputGlassSurface,
+    borderColor: reactNativeColorScheme.ultiHuman.glassBorder,
     borderRadius: radius(14),
     borderWidth: 1,
     marginBottom: spacing(2),
@@ -375,28 +375,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing(16),
   },
   attachmentMenuItemDivider: {
-    borderTopColor: '#4a4a4a',
+    borderTopColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderSoft,
     borderTopWidth: StyleSheet.hairlineWidth,
     marginTop: spacing(6),
     paddingTop: spacing(8),
   },
   attachmentMenuText: {
-    color: '#f3f3f3',
+    color: reactNativeColorScheme.text.primary,
     flex: 1,
     fontFamily: AppFonts.googleSansBold,
     fontSize: fontSize(13),
     lineHeight: spacing(18),
   },
   attachmentText: {
-    color: '#d6d6d6',
+    color: reactNativeColorScheme.text.secondary,
     fontFamily: AppFonts.googleSansBold,
     fontSize: fontSize(11),
     lineHeight: spacing(15),
   },
   composer: {
     alignItems: 'center',
-    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassPanel,
-    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderMuted,
+    backgroundColor: reactNativeColorScheme.ultiHuman.inputGlassSurface,
+    borderColor: reactNativeColorScheme.ultiHuman.glassBorder,
     borderRadius: radius(999),
     borderWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   heroEyebrow: {
-    color: '#bcbcbc',
+    color: reactNativeColorScheme.text.muted,
     fontFamily: AppFonts.googleSansBold,
     fontSize: fontSize(11),
     lineHeight: spacing(15),
@@ -431,7 +431,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   heroSubtitle: {
-    color: '#b5b5b5',
+    color: reactNativeColorScheme.text.secondary,
     fontFamily: AppFonts.googleSansMedium,
     fontSize: fontSize(14),
     lineHeight: spacing(20),
@@ -439,7 +439,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   heroTitle: {
-    color: '#f5f5f5',
+    color: reactNativeColorScheme.text.primary,
     fontFamily: AppFonts.googleSansBold,
     fontSize: fontSize(25),
     lineHeight: spacing(32),
@@ -478,7 +478,7 @@ const styles = StyleSheet.create({
     lineHeight: spacing(16),
   },
   menuItemPressed: {
-    backgroundColor: '#3d3d3d',
+    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glass,
   },
   micButton: {
     alignItems: 'center',
@@ -489,8 +489,8 @@ const styles = StyleSheet.create({
   },
   plusButton: {
     alignItems: 'center',
-    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassAction,
-    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderSoft,
+    backgroundColor: reactNativeColorScheme.ultiHuman.glassSurface,
+    borderColor: reactNativeColorScheme.ultiHuman.glassBorder,
     borderWidth: 1,
     borderRadius: radius(999),
     height: spacing(40),
@@ -498,7 +498,7 @@ const styles = StyleSheet.create({
     width: spacing(40),
   },
   plusButtonActive: {
-    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glass,
+    backgroundColor: reactNativeColorScheme.ultiHuman.inputGlassSurface,
   },
   pressed: {
     opacity: 0.84,

@@ -14,18 +14,9 @@ import { fontSize, spacing } from "@/utils/scale";
 import { AuthLogo } from "./AuthLogo";
 
 const authGradientColors = [
-  "#020914",
-  "#061321",
-  "#0a1d33",
-  "#122e46",
-] as const;
-
-const authStarField = [
-  { left: "11%", opacity: 0.24, size: 1, top: "9%" },
-  { left: "25%", opacity: 0.18, size: 1, top: "21%" },
-  { left: "47%", opacity: 0.28, size: 1.5, top: "12%" },
-  { left: "72%", opacity: 0.2, size: 1, top: "24%" },
-  { left: "86%", opacity: 0.26, size: 1, top: "11%" },
+  reactNativeColorScheme.ultiHuman.backgroundGradientStart,
+  reactNativeColorScheme.ultiHuman.backgroundGradientMiddle,
+  reactNativeColorScheme.ultiHuman.backgroundGradientEnd,
 ] as const;
 
 interface AuthMobileShellProps {
@@ -54,37 +45,13 @@ export const AuthMobileShell = ({
   }, [keyboardHeight, keyboardVisible]);
 
   return (
-    <View style={styles.screen}>
-      <StatusBar style="light" />
-      <LinearGradient
-        colors={authGradientColors}
-        end={{ x: 1, y: 0.95 }}
-        start={{ x: 0, y: 0 }}
-        style={StyleSheet.absoluteFill}
-      />
-      <LinearGradient
-        colors={["rgba(74, 182, 255, 0.18)", "rgba(74, 182, 255, 0.04)", "rgba(74, 182, 255, 0)"]}
-        end={{ x: 0.5, y: 1 }}
-        pointerEvents="none"
-        start={{ x: 0.5, y: 0 }}
-        style={styles.skyGlow}
-      />
-      {authStarField.map((star) => (
-        <View
-          key={`${star.left}-${star.top}`}
-          pointerEvents="none"
-          style={[
-            styles.star,
-            {
-              height: star.size,
-              left: star.left,
-              opacity: star.opacity,
-              top: star.top,
-              width: star.size,
-            },
-          ]}
-        />
-      ))}
+    <LinearGradient
+      colors={authGradientColors}
+      end={{ x: 1, y: 1 }}
+      start={{ x: 0, y: 0 }}
+      style={styles.screen}
+    >
+      <StatusBar backgroundColor="transparent" style="light" translucent />
       <View style={[styles.hero, androidHeroStyle]}>
         <SafeAreaView
           edges={["top", "left", "right"]}
@@ -119,7 +86,7 @@ export const AuthMobileShell = ({
           <View style={styles.formEntrance}>{children}</View>
         </ScrollView>
       </KeyboardAwareBottomSheetView>
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -150,7 +117,6 @@ const styles = StyleSheet.create({
     overflow: "visible",
   },
   screen: {
-    backgroundColor: reactNativeColorScheme.ultiHuman.background,
     flex: 1,
   },
   scrollContent: {
@@ -165,22 +131,10 @@ const styles = StyleSheet.create({
     marginTop: -spacing(52),
     width: "100%",
   },
-  skyGlow: {
-    height: spacing(280),
-    left: -spacing(80),
-    position: "absolute",
-    right: -spacing(80),
-    top: -spacing(80),
-  },
   copyBlock: {
     alignItems: "center",
     gap: spacing(8),
     width: "100%",
-  },
-  star: {
-    backgroundColor: "rgba(237, 248, 255, 0.9)",
-    borderRadius: 999,
-    position: "absolute",
   },
   subtitle: {
     color: reactNativeColorScheme.ultiHuman.text,

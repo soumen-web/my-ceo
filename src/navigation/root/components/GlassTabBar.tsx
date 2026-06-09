@@ -14,6 +14,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AppFonts } from "@/assets/fonts";
 import { useReducedMotionPreference } from "@/design-system/hooks";
+import { reactNativeColorScheme } from "@/design-system/tokens/colors";
 import type { AppTabParamList } from "@/navigation/route-types";
 import { fontSize, spacing } from "@/utils/scale";
 
@@ -36,12 +37,12 @@ const LABEL_IDLE_TIMEOUT_MS = 15000;
 
 const glassPalette = {
   activeText: "#b9e5ff",
-  baseSurface: "rgba(3, 14, 27, 0.38)",
+  baseSurface: reactNativeColorScheme.ultiHuman.tabGlassSurface,
   blueRefraction: "rgba(74, 182, 255, 0.12)",
   inactiveText: "rgba(226, 240, 251, 0.74)",
   innerStroke: "rgba(255, 255, 255, 0.2)",
-  nativeTint: "rgba(3, 14, 27, 0.28)",
-  rim: "rgba(174, 224, 255, 0.36)",
+  nativeTint: reactNativeColorScheme.ultiHuman.tabGlassSurface,
+  rim: reactNativeColorScheme.ultiHuman.glassBorder,
   shadow: "rgba(0, 11, 24, 0.5)",
 };
 

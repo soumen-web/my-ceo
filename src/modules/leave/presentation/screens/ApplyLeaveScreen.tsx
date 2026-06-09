@@ -818,8 +818,8 @@ const styles = StyleSheet.create({
     color: moduleColors.selectedText,
   },
   dateSheet: {
-    backgroundColor: reactNativeColorScheme.ultiHuman.background,
-    borderColor: moduleColors.borderStrong,
+    backgroundColor: reactNativeColorScheme.ultiHuman.inputGlassSurface,
+    borderColor: reactNativeColorScheme.ultiHuman.glassBorder,
     borderTopLeftRadius: radius(8),
     borderTopRightRadius: radius(8),
     borderWidth: 1,
