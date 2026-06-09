@@ -31,7 +31,7 @@ const ACTIVE_LABEL_WIDTH = spacing(58);
 const TAB_ITEM_GAP = spacing(0);
 const ANIMATION_DURATION_MS = 240;
 const BAR_WIDTH_ANIMATION_DURATION_MS = 420;
-const LABEL_IDLE_TIMEOUT_MS = 15000;
+const LABEL_IDLE_TIMEOUT_MS = 5000;
 
 const glassPalette = {
   activeText: "#f8fbff",
@@ -118,7 +118,7 @@ const GlassTabItem = ({
   const tabButtonWrapAnimatedStyle = useAnimatedStyle(() => ({
     width:
       INACTIVE_TAB_WIDTH +
-      (ACTIVE_TAB_WIDTH - INACTIVE_TAB_WIDTH) * selectionProgress.value,
+      (ACTIVE_TAB_WIDTH - INACTIVE_TAB_WIDTH) * labelProgress.value,
   }));
 
   const iconColor = focused
@@ -350,9 +350,7 @@ export const GlassTabBar = ({
       ]}
     >
       <View style={styles.glassShadow}>
-        <View style={styles.glassFrame}>
-          {materialContent}
-        </View>
+        <View style={styles.glassFrame}>{materialContent}</View>
       </View>
     </Animated.View>
   );
