@@ -94,7 +94,7 @@ export const reactNativeColorScheme = {
     glassSurface: 'rgba(12, 31, 55, 0.56)',
     inputGlassSurface: 'rgba(9, 29, 55, 0.76)',
     muted: '#91a9bd',
-    tabGlassSurface: 'rgba(3, 14, 27, 0.42)',
+    tabGlassSurface: 'rgba(255, 255, 255, 0.035)',
     text: '#f8fbff',
     surface: {
       glassFaint: 'rgba(255, 255, 255, 0.06)',

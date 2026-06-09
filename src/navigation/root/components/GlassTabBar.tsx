@@ -1,9 +1,8 @@
 import { Feather } from "@expo/vector-icons";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { GlassView, isGlassEffectAPIAvailable } from "expo-glass-effect";
 import { LinearGradient } from "expo-linear-gradient";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Platform, Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
+import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -24,9 +23,6 @@ const TAB_BAR_HEIGHT = spacing(66);
 const TAB_BAR_WIDTH_RATIO = 0.88;
 const TAB_BAR_COLLAPSED_WIDTH_RATIO = 0.68;
 const TAB_ITEM_HEIGHT = spacing(50);
-const ACTIVE_CAPSULE_WIDTH = spacing(84);
-const ACTIVE_CAPSULE_COLLAPSED_WIDTH = spacing(40);
-const ACTIVE_CAPSULE_HEIGHT = spacing(36);
 const PILL_RADIUS = 999;
 const ACTIVE_LABEL_GAP = spacing(5);
 const ACTIVE_LABEL_WIDTH = spacing(38);
@@ -36,14 +32,13 @@ const BAR_WIDTH_ANIMATION_DURATION_MS = 420;
 const LABEL_IDLE_TIMEOUT_MS = 15000;
 
 const glassPalette = {
-  activeText: "#b9e5ff",
+  activeText: "#f8fbff",
   baseSurface: reactNativeColorScheme.ultiHuman.tabGlassSurface,
   blueRefraction: "rgba(74, 182, 255, 0.12)",
-  inactiveText: "rgba(226, 240, 251, 0.74)",
-  innerStroke: "rgba(255, 255, 255, 0.2)",
-  nativeTint: reactNativeColorScheme.ultiHuman.tabGlassSurface,
-  rim: reactNativeColorScheme.ultiHuman.glassBorder,
-  shadow: "rgba(0, 11, 24, 0.5)",
+  inactiveText: "rgba(237, 248, 255, 0.78)",
+  innerStroke: "rgba(174, 224, 255, 0.2)",
+  rim: "rgba(174, 224, 255, 0.34)",
+  shadow: "rgba(0, 11, 24, 0.36)",
 };
 
 const iconByRoute: Record<TabRouteName, keyof typeof Feather.glyphMap> = {
@@ -58,18 +53,6 @@ const labelByRoute: Record<TabRouteName, string> = {
   TabMyDesk: "MyDesk",
   TabProfile: "Profile",
   TabWexa: "Wexa",
-};
-
-const canUseGlassEffect = () => {
-  if (Platform.OS !== "ios") {
-    return false;
-  }
-
-  try {
-    return isGlassEffectAPIAvailable();
-  } catch {
-    return false;
-  }
 };
 
 interface GlassTabItemProps {
@@ -125,12 +108,9 @@ const GlassTabItem = ({
     width: ACTIVE_LABEL_WIDTH * labelProgress.value,
   }));
 
-  const activeGlowAnimatedStyle = useAnimatedStyle(() => ({
+  const activeCapsuleAnimatedStyle = useAnimatedStyle(() => ({
     opacity: selectionProgress.value,
-    width:
-      ACTIVE_CAPSULE_COLLAPSED_WIDTH +
-      (ACTIVE_CAPSULE_WIDTH - ACTIVE_CAPSULE_COLLAPSED_WIDTH) *
-        labelProgress.value,
+    transform: [{ scale: 0.92 + selectionProgress.value * 0.08 }],
   }));
 
   const iconColor = focused
@@ -162,11 +142,15 @@ const GlassTabItem = ({
         <Animated.View style={[styles.tabItem, itemAnimatedStyle]}>
           <Animated.View
             pointerEvents="none"
-            style={[styles.activeCapsule, activeGlowAnimatedStyle]}
+            style={[styles.activeCapsule, activeCapsuleAnimatedStyle]}
           >
             <LinearGradient
-              colors={["rgba(255, 255, 255, 0.16)", "rgba(255, 255, 255, 0)"]}
-              end={{ x: 1, y: 0 }}
+              colors={[
+                "rgba(74, 182, 255, 0.22)",
+                "rgba(174, 224, 255, 0.1)",
+                "rgba(2, 9, 20, 0.04)",
+              ]}
+              end={{ x: 1, y: 1 }}
               start={{ x: 0, y: 0 }}
               style={StyleSheet.absoluteFill}
             />
@@ -209,7 +193,6 @@ export const GlassTabBar = ({
     safeAreaInsets.bottom,
     spacing(10),
   );
-  const glassAvailable = canUseGlassEffect();
   const expandedBarWidth = windowWidth * TAB_BAR_WIDTH_RATIO;
   const collapsedBarWidth = windowWidth * TAB_BAR_COLLAPSED_WIDTH_RATIO;
 
@@ -303,8 +286,10 @@ export const GlassTabBar = ({
     <>
       <LinearGradient
         colors={[
-          "rgba(255, 255, 255, 0.09)",
+          "rgba(255, 255, 255, 0.06)",
+          "rgba(74, 182, 255, 0.05)",
           glassPalette.baseSurface,
+          "rgba(2, 9, 20, 0.16)",
           glassPalette.blueRefraction,
         ]}
         end={{ x: 1, y: 1 }}
@@ -313,14 +298,34 @@ export const GlassTabBar = ({
       />
       <LinearGradient
         colors={[
-          "rgba(255, 255, 255, 0.32)",
-          "rgba(174, 224, 255, 0.055)",
+          "rgba(255, 255, 255, 0.075)",
+          "rgba(174, 224, 255, 0.045)",
+          "rgba(2, 9, 20, 0.12)",
+        ]}
+        end={{ x: 1, y: 1 }}
+        pointerEvents="none"
+        start={{ x: 0, y: 0 }}
+        style={styles.innerLiquidSurface}
+      />
+      <LinearGradient
+        colors={[
+          "rgba(255, 255, 255, 0.2)",
+          "rgba(174, 224, 255, 0.04)",
           "rgba(255, 255, 255, 0)",
         ]}
         pointerEvents="none"
         style={styles.topGlassHighlight}
       />
       <View pointerEvents="none" style={styles.innerGlassStroke} />
+      <LinearGradient
+        colors={[
+          "rgba(255, 255, 255, 0)",
+          "rgba(174, 224, 255, 0.04)",
+          "rgba(255, 255, 255, 0.08)",
+        ]}
+        pointerEvents="none"
+        style={styles.bottomGlassHighlight}
+      />
       {barContent}
     </>
   );
@@ -338,17 +343,6 @@ export const GlassTabBar = ({
     >
       <View style={styles.glassShadow}>
         <View style={styles.glassFrame}>
-          {glassAvailable ? (
-            <GlassView
-              colorScheme="light"
-              glassEffectStyle="regular"
-              isInteractive
-              style={[StyleSheet.absoluteFill, styles.nativeGlassLayer]}
-              tintColor={glassPalette.nativeTint}
-            />
-          ) : (
-            <View style={[StyleSheet.absoluteFill, styles.fallbackGlass]} />
-          )}
           {materialContent}
         </View>
       </View>
@@ -366,28 +360,26 @@ const styles = StyleSheet.create({
     textShadowRadius: spacing(6),
   },
   activeCapsule: {
-    alignSelf: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.13)",
-    borderColor: "rgba(174, 224, 255, 0.42)",
+    // Product wants a visible selected inner capsule; keep this layer.
+    borderColor: "rgba(174, 224, 255, 0.3)",
     borderRadius: PILL_RADIUS,
-    borderWidth: 1,
-    height: ACTIVE_CAPSULE_HEIGHT,
+    borderWidth: StyleSheet.hairlineWidth,
+    bottom: spacing(7),
+    left: spacing(8),
     overflow: "hidden",
     position: "absolute",
-    shadowColor: "rgba(74, 182, 255, 0.26)",
-    shadowOffset: { height: spacing(8), width: 0 },
-    shadowOpacity: 0.24,
-    shadowRadius: spacing(16),
-    width: ACTIVE_CAPSULE_WIDTH,
-  },
-  fallbackGlass: {
-    backgroundColor: "rgba(3, 14, 27, 0.42)",
+    right: spacing(8),
+    shadowColor: "rgba(74, 182, 255, 0.34)",
+    shadowOffset: { height: 0, width: 0 },
+    shadowOpacity: 0.2,
+    shadowRadius: spacing(10),
+    top: spacing(7),
   },
   glassFrame: {
-    backgroundColor: "rgba(3, 14, 27, 0.18)",
+    backgroundColor: "transparent",
     borderColor: glassPalette.rim,
     borderRadius: PILL_RADIUS,
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     height: TAB_BAR_HEIGHT,
     justifyContent: "center",
     overflow: "hidden",
@@ -396,13 +388,9 @@ const styles = StyleSheet.create({
   glassShadow: {
     borderRadius: PILL_RADIUS,
     shadowColor: glassPalette.shadow,
-    shadowOffset: { height: spacing(14), width: 0 },
-    shadowOpacity: 0.32,
-    shadowRadius: spacing(24),
-  },
-  nativeGlassLayer: {
-    borderRadius: PILL_RADIUS,
-    overflow: "hidden",
+    shadowOffset: { height: spacing(18), width: 0 },
+    shadowOpacity: 0.26,
+    shadowRadius: spacing(32),
   },
   inactiveIcon: {
     textShadowColor: "rgba(0, 11, 24, 0.54)",
@@ -413,13 +401,22 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     borderColor: glassPalette.innerStroke,
     borderRadius: PILL_RADIUS,
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     margin: StyleSheet.hairlineWidth,
+  },
+  innerLiquidSurface: {
+    borderRadius: PILL_RADIUS,
+    bottom: spacing(5),
+    left: spacing(5),
+    position: "absolute",
+    right: spacing(5),
+    top: spacing(5),
   },
   root: {
     alignSelf: "center",
     backgroundColor: "transparent",
     bottom: spacing(4),
+    paddingHorizontal: spacing(2),
     position: "absolute",
   },
   tabButton: {
@@ -463,6 +460,13 @@ const styles = StyleSheet.create({
     textShadowColor: "rgba(11, 26, 56, 0.34)",
     textShadowOffset: { height: 1, width: 0 },
     textShadowRadius: spacing(5),
+  },
+  bottomGlassHighlight: {
+    bottom: spacing(3),
+    height: spacing(20),
+    left: spacing(18),
+    position: "absolute",
+    right: spacing(18),
   },
   tabRow: {
     alignItems: "center",
