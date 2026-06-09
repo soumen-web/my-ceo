@@ -23,9 +23,11 @@ const TAB_BAR_HEIGHT = spacing(66);
 const TAB_BAR_WIDTH_RATIO = 0.88;
 const TAB_BAR_COLLAPSED_WIDTH_RATIO = 0.68;
 const TAB_ITEM_HEIGHT = spacing(50);
+const ACTIVE_TAB_WIDTH = spacing(112);
+const INACTIVE_TAB_WIDTH = spacing(58);
 const PILL_RADIUS = 999;
 const ACTIVE_LABEL_GAP = spacing(5);
-const ACTIVE_LABEL_WIDTH = spacing(38);
+const ACTIVE_LABEL_WIDTH = spacing(58);
 const TAB_ITEM_GAP = spacing(0);
 const ANIMATION_DURATION_MS = 240;
 const BAR_WIDTH_ANIMATION_DURATION_MS = 420;
@@ -113,6 +115,12 @@ const GlassTabItem = ({
     transform: [{ scale: 0.92 + selectionProgress.value * 0.08 }],
   }));
 
+  const tabButtonWrapAnimatedStyle = useAnimatedStyle(() => ({
+    width:
+      INACTIVE_TAB_WIDTH +
+      (ACTIVE_TAB_WIDTH - INACTIVE_TAB_WIDTH) * selectionProgress.value,
+  }));
+
   const iconColor = focused
     ? glassPalette.activeText
     : glassPalette.inactiveText;
@@ -121,7 +129,7 @@ const GlassTabItem = ({
     : glassPalette.inactiveText;
 
   return (
-    <View style={styles.tabButtonWrap}>
+    <Animated.View style={[styles.tabButtonWrap, tabButtonWrapAnimatedStyle]}>
       <Pressable
         accessibilityLabel={accessibilityLabel}
         accessibilityRole="tab"
@@ -172,7 +180,7 @@ const GlassTabItem = ({
           </Animated.View>
         </Animated.View>
       </Pressable>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -365,10 +373,10 @@ const styles = StyleSheet.create({
     borderRadius: PILL_RADIUS,
     borderWidth: StyleSheet.hairlineWidth,
     bottom: spacing(7),
-    left: spacing(8),
+    left: spacing(3),
     overflow: "hidden",
     position: "absolute",
-    right: spacing(8),
+    right: spacing(3),
     shadowColor: "rgba(74, 182, 255, 0.34)",
     shadowOffset: { height: 0, width: 0 },
     shadowOpacity: 0.2,
@@ -428,9 +436,8 @@ const styles = StyleSheet.create({
   },
   tabButtonWrap: {
     borderRadius: PILL_RADIUS,
-    flex: 1,
     height: TAB_ITEM_HEIGHT,
-    minWidth: spacing(48),
+    minWidth: INACTIVE_TAB_WIDTH,
     zIndex: 2,
   },
   tabButtonPressed: {
@@ -473,6 +480,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: TAB_ITEM_GAP,
     height: "100%",
+    justifyContent: "space-between",
     zIndex: 2,
   },
   topGlassHighlight: {
