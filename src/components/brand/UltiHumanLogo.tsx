@@ -11,9 +11,10 @@ export const ULTIHUMAN_TAGLINE = 'A National Award Winning Company';
 const webskittersLogo = require('../../assets/brand/webskitters-logo.png');
 const webskittersHeaderLogo = require('../../assets/brand/webskitters-header-logo.png');
 const webskittersSplashLogo = require('../../assets/brand/webskitters-splash-logo.png');
+const webskittersWexaLogo = require('../../assets/brand/WSLogo.png');
 
 type LogoSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-type LogoVariant = 'mark' | 'full' | 'hero';
+type LogoVariant = 'mark' | 'full' | 'hero' | 'wexa';
 
 interface UltiHumanLogoProps {
   size?: LogoSize;
@@ -36,12 +37,15 @@ export const UltiHumanLogo = ({
 }: UltiHumanLogoProps) => {
   const logoSize = logoSizeByVariant[size];
   const isCompact = variant === 'mark';
+  const isWexa = variant === 'wexa';
   const isHero = variant === 'hero';
   const source = isCompact
     ? webskittersLogo
-    : isHero
-      ? webskittersSplashLogo
-      : webskittersHeaderLogo;
+    : isWexa
+      ? webskittersWexaLogo
+      : isHero
+        ? webskittersSplashLogo
+        : webskittersHeaderLogo;
 
   return (
     <View
@@ -52,8 +56,8 @@ export const UltiHumanLogo = ({
         isCompact ? styles.compactShell : undefined,
         {
           borderRadius: isCompact ? radius(10) : 0,
-          height: isCompact ? logoSize : Math.round(logoSize * 0.56),
-          width: isCompact ? logoSize : Math.round(logoSize * 1.62),
+          height: isCompact || isWexa ? logoSize : Math.round(logoSize * 0.56),
+          width: isCompact || isWexa ? logoSize : Math.round(logoSize * 1.62),
         },
         style,
       ]}

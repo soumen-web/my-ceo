@@ -1,36 +1,29 @@
-import { Feather } from '@expo/vector-icons';
-import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Feather } from "@expo/vector-icons";
+import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { LinearGradient } from "expo-linear-gradient";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import Animated, {
   Easing,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
   withTiming,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-import { AppFonts } from '@/assets/fonts';
-import { PremiumPressable } from '@/design-system/components';
-import { useReducedMotionPreference } from '@/design-system/hooks';
-import { MobileScreenShell } from '@/design-system/patterns/MobileScreenShell';
-import { reactNativeColorScheme } from '@/design-system/tokens/colors';
-import { toAuthenticatedUserViewModel, useAuthSession } from '@/modules/auth';
-import { DashboardShellHeader } from '@/modules/home/presentation/components/DashboardShellHeader';
-import {
-  ROUTES,
-  type AppTabParamList,
-} from '@/navigation/route-types';
-import { fontSize, radius, spacing } from '@/utils/scale';
+import { AppFonts } from "@/assets/fonts";
+import { UltiHumanLogo } from "@/components/brand";
+import { PremiumPressable } from "@/design-system/components";
+import { useReducedMotionPreference } from "@/design-system/hooks";
+import { MobileScreenShell } from "@/design-system/patterns/MobileScreenShell";
+import { reactNativeColorScheme } from "@/design-system/tokens/colors";
+import { toAuthenticatedUserViewModel, useAuthSession } from "@/modules/auth";
+import { DashboardShellHeader } from "@/modules/home/presentation/components/DashboardShellHeader";
+import { ROUTES, type AppTabParamList } from "@/navigation/route-types";
+import { fontSize, radius, spacing } from "@/utils/scale";
 
-type WexaScreenProps = BottomTabScreenProps<AppTabParamList, 'TabWexa'>;
-type AttachmentType = 'media' | null;
+type WexaScreenProps = BottomTabScreenProps<AppTabParamList, "TabWexa">;
+type AttachmentType = "media" | null;
 type AttachmentMenuItem = {
   divider?: boolean;
   icon: keyof typeof Feather.glyphMap;
@@ -39,33 +32,39 @@ type AttachmentMenuItem = {
 };
 
 const attachmentMenuItems: AttachmentMenuItem[] = [
-  { icon: 'paperclip', label: 'Add photos & videos' },
-  { icon: 'file-text', label: 'Recent files', trailing: true },
-  { divider: true, icon: 'image', label: 'Create image' },
-  { icon: 'send', label: 'Deep research' },
-  { icon: 'globe', label: 'Web search' },
-  { icon: 'more-horizontal', label: 'More', trailing: true },
+  { icon: "paperclip", label: "Add photos & videos" },
+  { icon: "file-text", label: "Recent files", trailing: true },
+  { divider: true, icon: "image", label: "Create image" },
+  { icon: "send", label: "Deep research" },
+  { icon: "globe", label: "Web search" },
+  { icon: "more-horizontal", label: "More", trailing: true },
 ] as const;
 
 const initialsFrom = (value: string | undefined): string => {
   const parts = value?.trim().split(/\s+/).filter(Boolean) ?? [];
 
   return parts.length
-    ? parts.slice(0, 2).map((part) => part[0]).join('').toUpperCase()
-    : 'W';
+    ? parts
+        .slice(0, 2)
+        .map((part) => part[0])
+        .join("")
+        .toUpperCase()
+    : "W";
 };
 
 export const WexaScreen = ({ navigation }: WexaScreenProps) => {
   const reduceMotionEnabled = useReducedMotionPreference();
-  const [prompt, setPrompt] = useState('');
+  const [prompt, setPrompt] = useState("");
   const [attachmentType, setAttachmentType] = useState<AttachmentType>(null);
   const [attachmentMenuVisible, setAttachmentMenuVisible] = useState(false);
   const heroProgress = useSharedValue(reduceMotionEnabled ? 1 : 0);
+  const logoProgress = useSharedValue(reduceMotionEnabled ? 1 : 0);
   const composerGlowProgress = useSharedValue(reduceMotionEnabled ? 1 : 0);
   const heroEnterDistance = spacing(10);
+  const logoEnterDistance = spacing(12);
   const { user } = useAuthSession();
   const userViewModel = toAuthenticatedUserViewModel(user);
-  const displayName = userViewModel?.displayName ?? 'Employee';
+  const displayName = userViewModel?.displayName ?? "Employee";
   const canSubmit = useMemo(
     () => prompt.trim().length > 0 || attachmentType !== null,
     [attachmentType, prompt],
@@ -79,6 +78,16 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
           easing: Easing.out(Easing.cubic),
         });
 
+    logoProgress.value = reduceMotionEnabled
+      ? 1
+      : withDelay(
+          80,
+          withTiming(1, {
+            duration: 420,
+            easing: Easing.out(Easing.back(1.12)),
+          }),
+        );
+
     composerGlowProgress.value = reduceMotionEnabled
       ? 1
       : withDelay(
@@ -88,7 +97,7 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
             easing: Easing.out(Easing.cubic),
           }),
         );
-  }, [composerGlowProgress, heroProgress, reduceMotionEnabled]);
+  }, [composerGlowProgress, heroProgress, logoProgress, reduceMotionEnabled]);
 
   const heroAnimatedStyle = useAnimatedStyle(() => ({
     opacity: heroProgress.value,
@@ -103,6 +112,14 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
     transform: [{ scale: 0.97 + composerGlowProgress.value * 0.03 }],
   }));
 
+  const logoAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: logoProgress.value,
+    transform: [
+      { translateY: (1 - logoProgress.value) * logoEnterDistance },
+      { scale: 0.88 + logoProgress.value * 0.12 },
+    ],
+  }));
+
   const openNotifications = useCallback(() => {
     navigation.navigate(ROUTES.tabMyDesk, { screen: ROUTES.notifications });
   }, [navigation]);
@@ -112,14 +129,14 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
       return;
     }
 
-    setPrompt('');
+    setPrompt("");
     setAttachmentType(null);
     setAttachmentMenuVisible(false);
   }, [canSubmit]);
 
   const selectAttachmentMenuItem = useCallback((label: string) => {
-    if (label === 'Add photos & videos' || label === 'Recent files') {
-      setAttachmentType('media');
+    if (label === "Add photos & videos" || label === "Recent files") {
+      setAttachmentType("media");
     }
 
     setAttachmentMenuVisible(false);
@@ -141,27 +158,11 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
       scrollEnabled={false}
     >
       <Animated.View style={[styles.heroWrap, heroAnimatedStyle]}>
-        <View style={styles.aiOrb}>
-          <LinearGradient
-            colors={[
-              reactNativeColorScheme.ultiHuman.glassSurface,
-              reactNativeColorScheme.ultiHuman.inputGlassSurface,
-              reactNativeColorScheme.ultiHuman.tabGlassSurface,
-            ]}
-            style={StyleSheet.absoluteFill}
-          />
-          <Feather
-            color={reactNativeColorScheme.text.primary}
-            name="command"
-            size={spacing(30)}
-          />
-        </View>
+        <Animated.View style={[styles.heroLogoFrame, logoAnimatedStyle]}>
+          <UltiHumanLogo size="xl" style={styles.heroLogo} variant="wexa" />
+        </Animated.View>
         <Text style={styles.heroEyebrow}>Wexa AI</Text>
         <Text style={styles.heroTitle}>How can I help you today?</Text>
-        <Text style={styles.heroSubtitle}>
-          Ask anything about attendance, leave, payroll, HR policies, or upload a
-          photo/video for Wexa to review.
-        </Text>
       </Animated.View>
 
       <View style={styles.composerWrap}>
@@ -200,11 +201,7 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
 
         {attachmentType ? (
           <View style={styles.attachmentPill}>
-            <Feather
-              color="#f2f2f2"
-              name="paperclip"
-              size={spacing(14)}
-            />
+            <Feather color="#f2f2f2" name="paperclip" size={spacing(14)} />
             <Text style={styles.attachmentText}>Photo/video ready</Text>
             <PremiumPressable
               accessibilityLabel="Remove attachment"
@@ -223,9 +220,9 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
 
         <LinearGradient
           colors={[
-            'rgba(16, 51, 91, 0.94)',
-            'rgba(9, 32, 62, 0.9)',
-            'rgba(5, 22, 43, 0.92)',
+            "rgba(16, 51, 91, 0.94)",
+            "rgba(9, 32, 62, 0.9)",
+            "rgba(5, 22, 43, 0.92)",
           ]}
           end={{ x: 1, y: 1 }}
           start={{ x: 0, y: 0 }}
@@ -238,7 +235,9 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
           <PremiumPressable
             accessibilityLabel="Open upload menu"
             accessibilityRole="button"
-            accessibilityState={attachmentMenuVisible ? { expanded: true } : undefined}
+            accessibilityState={
+              attachmentMenuVisible ? { expanded: true } : undefined
+            }
             onPress={() => setAttachmentMenuVisible((isVisible) => !isVisible)}
             pressScale={0.94}
             style={({ pressed }) => [
@@ -312,28 +311,14 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
 };
 
 const styles = StyleSheet.create({
-  aiOrb: {
-    alignItems: 'center',
-    borderColor: 'rgba(255, 255, 255, 0.46)',
-    borderRadius: radius(18),
-    borderWidth: 1,
-    height: spacing(72),
-    justifyContent: 'center',
-    overflow: 'hidden',
-    shadowColor: '#000000',
-    shadowOffset: { height: 0, width: 0 },
-    shadowOpacity: 0.34,
-    shadowRadius: spacing(18),
-    width: spacing(72),
-  },
   attachmentPill: {
-    alignItems: 'center',
-    alignSelf: 'flex-start',
+    alignItems: "center",
+    alignSelf: "flex-start",
     backgroundColor: reactNativeColorScheme.ultiHuman.glassSurface,
     borderColor: reactNativeColorScheme.ultiHuman.glassBorder,
     borderRadius: radius(99),
     borderWidth: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: spacing(7),
     marginTop: spacing(10),
     paddingLeft: spacing(10),
@@ -341,23 +326,23 @@ const styles = StyleSheet.create({
     paddingVertical: spacing(6),
   },
   attachmentMenu: {
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     backgroundColor: reactNativeColorScheme.ultiHuman.inputGlassSurface,
     borderColor: reactNativeColorScheme.ultiHuman.glassBorder,
     borderRadius: radius(14),
     borderWidth: 1,
     marginBottom: spacing(2),
-    overflow: 'hidden',
+    overflow: "hidden",
     paddingVertical: spacing(8),
-    shadowColor: '#000000',
+    shadowColor: "#000000",
     shadowOffset: { height: spacing(14), width: 0 },
     shadowOpacity: 0.32,
     shadowRadius: spacing(22),
     width: spacing(228),
   },
   attachmentMenuItem: {
-    alignItems: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    flexDirection: "row",
     gap: spacing(12),
     minHeight: spacing(36),
     paddingHorizontal: spacing(16),
@@ -382,14 +367,14 @@ const styles = StyleSheet.create({
     lineHeight: spacing(15),
   },
   composer: {
-    alignItems: 'center',
+    alignItems: "center",
     borderColor: reactNativeColorScheme.ultiHuman.glassBorder,
     borderRadius: radius(999),
     borderWidth: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: spacing(7),
     minHeight: spacing(50),
-    overflow: 'hidden',
+    overflow: "hidden",
     paddingLeft: spacing(6),
     paddingRight: spacing(6),
     paddingVertical: spacing(4),
@@ -399,31 +384,35 @@ const styles = StyleSheet.create({
     shadowRadius: spacing(20),
   },
   composerGlow: {
-    backgroundColor: 'rgba(123, 204, 255, 0.08)',
+    backgroundColor: "rgba(123, 204, 255, 0.08)",
     bottom: -spacing(18),
     left: spacing(20),
-    position: 'absolute',
+    position: "absolute",
     right: spacing(20),
     top: -spacing(18),
   },
   composerWrap: {
-    width: '100%',
+    width: "100%",
   },
   heroEyebrow: {
     color: reactNativeColorScheme.text.muted,
     fontFamily: AppFonts.googleSansBold,
     fontSize: fontSize(11),
     lineHeight: spacing(15),
-    marginTop: spacing(16),
-    textTransform: 'uppercase',
+    marginTop: spacing(4),
+    textTransform: "uppercase",
   },
-  heroSubtitle: {
-    color: reactNativeColorScheme.text.secondary,
-    fontFamily: AppFonts.googleSansMedium,
-    fontSize: fontSize(14),
-    lineHeight: spacing(20),
-    maxWidth: spacing(310),
-    textAlign: 'center',
+  heroLogo: {
+    opacity: 0.96,
+  },
+  heroLogoFrame: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: spacing(6),
+    shadowColor: reactNativeColorScheme.ultiHuman.surface.cardShadow,
+    shadowOffset: { height: spacing(14), width: 0 },
+    shadowOpacity: 0.24,
+    shadowRadius: spacing(22),
   },
   heroTitle: {
     color: reactNativeColorScheme.text.primary,
@@ -431,12 +420,12 @@ const styles = StyleSheet.create({
     fontSize: fontSize(25),
     lineHeight: spacing(32),
     marginTop: spacing(5),
-    textAlign: 'center',
+    textAlign: "center",
   },
   heroWrap: {
-    alignItems: 'center',
+    alignItems: "center",
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: spacing(10),
   },
   input: {
@@ -454,47 +443,47 @@ const styles = StyleSheet.create({
     backgroundColor: reactNativeColorScheme.ultiHuman.surface.glass,
   },
   micButton: {
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: radius(999),
     height: spacing(38),
-    justifyContent: 'center',
+    justifyContent: "center",
     width: spacing(34),
   },
   plusButton: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.055)',
-    borderColor: 'rgba(174, 224, 255, 0.22)',
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.055)",
+    borderColor: "rgba(174, 224, 255, 0.22)",
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: radius(999),
     height: spacing(40),
-    justifyContent: 'center',
+    justifyContent: "center",
     width: spacing(40),
   },
   plusButtonActive: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
   },
   pressed: {
     opacity: 0.84,
     transform: [{ scale: 0.97 }],
   },
   removeAttachmentButton: {
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: radius(99),
     height: spacing(22),
-    justifyContent: 'center',
+    justifyContent: "center",
     width: spacing(22),
   },
   screenContent: {
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     paddingBottom: spacing(82),
   },
   waveButton: {
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
+    alignItems: "center",
+    backgroundColor: "#ffffff",
     borderRadius: radius(999),
     height: spacing(40),
-    justifyContent: 'center',
+    justifyContent: "center",
     width: spacing(40),
   },
   waveButtonIdle: {
