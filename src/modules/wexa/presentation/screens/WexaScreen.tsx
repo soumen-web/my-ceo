@@ -1,8 +1,15 @@
 import { Feather } from "@expo/vector-icons";
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { LinearGradient } from "expo-linear-gradient";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -19,6 +26,7 @@ import { MobileScreenShell } from "@/design-system/patterns/MobileScreenShell";
 import { reactNativeColorScheme } from "@/design-system/tokens/colors";
 import { toAuthenticatedUserViewModel, useAuthSession } from "@/modules/auth";
 import { DashboardShellHeader } from "@/modules/home/presentation/components/DashboardShellHeader";
+import { useWexaChat } from "@/modules/wexa/presentation/hooks/useWexaChat";
 import { ROUTES, type AppTabParamList } from "@/navigation/route-types";
 import { fontSize, radius, spacing } from "@/utils/scale";
 
@@ -57,6 +65,16 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
   const [prompt, setPrompt] = useState("");
   const [attachmentType, setAttachmentType] = useState<AttachmentType>(null);
   const [attachmentMenuVisible, setAttachmentMenuVisible] = useState(false);
+  const chatScrollRef = useRef<ScrollView>(null);
+  const {
+    clearChat,
+    error,
+    hasMessages,
+    isLoading,
+    messages,
+    retryLastMessage,
+    sendMessage,
+  } = useWexaChat();
   const heroProgress = useSharedValue(reduceMotionEnabled ? 1 : 0);
   const logoProgress = useSharedValue(reduceMotionEnabled ? 1 : 0);
   const composerGlowProgress = useSharedValue(reduceMotionEnabled ? 1 : 0);
@@ -66,9 +84,19 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
   const userViewModel = toAuthenticatedUserViewModel(user);
   const displayName = userViewModel?.displayName ?? "Employee";
   const canSubmit = useMemo(
-    () => prompt.trim().length > 0 || attachmentType !== null,
-    [attachmentType, prompt],
+    () => !isLoading && (prompt.trim().length > 0 || attachmentType !== null),
+    [attachmentType, isLoading, prompt],
   );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      chatScrollRef.current?.scrollToEnd({ animated: true });
+    }, 80);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [error, isLoading, messages.length]);
 
   useEffect(() => {
     heroProgress.value = reduceMotionEnabled
@@ -124,15 +152,26 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
     navigation.navigate(ROUTES.tabMyDesk, { screen: ROUTES.notifications });
   }, [navigation]);
 
-  const submitPrompt = useCallback(() => {
+  const submitPrompt = useCallback(async () => {
     if (!canSubmit) {
       return;
     }
 
+    const content = [
+      prompt.trim() || "I selected a photo/video for Wexa to review.",
+      attachmentType
+        ? "Attachment selected: photo/video. File upload is not connected in this build."
+        : "",
+    ]
+      .filter(Boolean)
+      .join("\n\n");
+
     setPrompt("");
     setAttachmentType(null);
     setAttachmentMenuVisible(false);
-  }, [canSubmit]);
+
+    await sendMessage(content);
+  }, [attachmentType, canSubmit, prompt, sendMessage]);
 
   const selectAttachmentMenuItem = useCallback((label: string) => {
     if (label === "Add photos & videos" || label === "Recent files") {
@@ -157,13 +196,105 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
       scrollBounces={false}
       scrollEnabled={false}
     >
-      <Animated.View style={[styles.heroWrap, heroAnimatedStyle]}>
-        <Animated.View style={[styles.heroLogoFrame, logoAnimatedStyle]}>
-          <UltiHumanLogo size="xl" style={styles.heroLogo} variant="wexa" />
+      {hasMessages ? (
+        <View style={styles.chatWrap}>
+          <View style={styles.chatHeader}>
+            <Text style={styles.chatHeaderTitle}>Wexa conversation</Text>
+            <PremiumPressable
+              accessibilityLabel="Clear Wexa chat"
+              accessibilityRole="button"
+              disabled={isLoading}
+              onPress={clearChat}
+              pressScale={0.96}
+              style={({ pressed }) => [
+                styles.clearButton,
+                pressed ? styles.pressed : undefined,
+              ]}
+            >
+              <Feather
+                color={reactNativeColorScheme.ultiHuman.accent}
+                name="trash-2"
+                size={spacing(15)}
+              />
+              <Text style={styles.clearButtonText}>Clear</Text>
+            </PremiumPressable>
+          </View>
+
+          <ScrollView
+            contentContainerStyle={styles.chatContent}
+            keyboardShouldPersistTaps="handled"
+            ref={chatScrollRef}
+            showsVerticalScrollIndicator={false}
+          >
+            {messages.map((message) => (
+              <View
+                key={message.id}
+                style={[
+                  styles.messageBubble,
+                  message.role === "user"
+                    ? styles.userMessageBubble
+                    : styles.assistantMessageBubble,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.messageAuthor,
+                    message.role === "user"
+                      ? styles.userMessageAuthor
+                      : styles.assistantMessageAuthor,
+                  ]}
+                >
+                  {message.role === "user" ? "You" : "Wexa"}
+                </Text>
+                <Text style={styles.messageText}>{message.content}</Text>
+              </View>
+            ))}
+
+            {isLoading ? (
+              <View style={[styles.messageBubble, styles.assistantMessageBubble]}>
+                <View style={styles.typingRow}>
+                  <ActivityIndicator
+                    color={reactNativeColorScheme.ultiHuman.accent}
+                    size="small"
+                  />
+                  <Text style={styles.typingText}>Wexa is thinking...</Text>
+                </View>
+              </View>
+            ) : null}
+
+            {error ? (
+              <View style={styles.errorCard}>
+                <Text style={styles.errorText}>{error}</Text>
+                <PremiumPressable
+                  accessibilityLabel="Retry last Wexa message"
+                  accessibilityRole="button"
+                  onPress={retryLastMessage}
+                  pressScale={0.96}
+                  style={({ pressed }) => [
+                    styles.retryButton,
+                    pressed ? styles.pressed : undefined,
+                  ]}
+                >
+                  <Feather
+                    color={reactNativeColorScheme.text.inverse}
+                    name="refresh-cw"
+                    size={spacing(14)}
+                  />
+                  <Text style={styles.retryButtonText}>Retry</Text>
+                </PremiumPressable>
+              </View>
+            ) : null}
+          </ScrollView>
+        </View>
+      ) : (
+        <Animated.View style={[styles.heroWrap, heroAnimatedStyle]}>
+          <Animated.View style={[styles.heroLogoFrame, logoAnimatedStyle]}>
+            <UltiHumanLogo size="xl" style={styles.heroLogo} variant="wexa" />
+          </Animated.View>
+          <Text style={styles.heroEyebrow}>Wexa AI</Text>
+          <Text style={styles.heroTitle}>How can I help you today?</Text>
         </Animated.View>
-        <Text style={styles.heroEyebrow}>Wexa AI</Text>
-        <Text style={styles.heroTitle}>How can I help you today?</Text>
-      </Animated.View>
+      )}
 
       <View style={styles.composerWrap}>
         {attachmentMenuVisible ? (
@@ -257,6 +388,7 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
             accessibilityLabel="Ask Wexa"
             allowFontScaling
             onChangeText={setPrompt}
+            onSubmitEditing={submitPrompt}
             placeholder="Ask anything"
             placeholderTextColor={reactNativeColorScheme.text.muted}
             returnKeyType="send"
@@ -294,15 +426,22 @@ export const WexaScreen = ({ navigation }: WexaScreenProps) => {
               pressed ? styles.pressed : undefined,
             ]}
           >
-            <Feather
-              color={
-                canSubmit
-                  ? reactNativeColorScheme.text.inverse
-                  : reactNativeColorScheme.text.disabled
-              }
-              name="arrow-up"
-              size={spacing(22)}
-            />
+            {isLoading ? (
+              <ActivityIndicator
+                color={reactNativeColorScheme.text.disabled}
+                size="small"
+              />
+            ) : (
+              <Feather
+                color={
+                  canSubmit
+                    ? reactNativeColorScheme.text.inverse
+                    : reactNativeColorScheme.text.disabled
+                }
+                name="arrow-up"
+                size={spacing(22)}
+              />
+            )}
           </PremiumPressable>
         </LinearGradient>
       </View>
@@ -394,6 +533,69 @@ const styles = StyleSheet.create({
   composerWrap: {
     width: "100%",
   },
+  assistantMessageAuthor: {
+    color: reactNativeColorScheme.ultiHuman.accent,
+  },
+  assistantMessageBubble: {
+    alignSelf: "flex-start",
+    backgroundColor: reactNativeColorScheme.ultiHuman.glassSurface,
+    borderColor: reactNativeColorScheme.ultiHuman.glassBorder,
+  },
+  chatContent: {
+    gap: spacing(10),
+    paddingBottom: spacing(8),
+    paddingTop: spacing(4),
+  },
+  chatHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  chatHeaderTitle: {
+    color: reactNativeColorScheme.text.secondary,
+    fontFamily: AppFonts.googleSansBold,
+    fontSize: fontSize(12),
+    lineHeight: spacing(16),
+    textTransform: "uppercase",
+  },
+  chatWrap: {
+    flex: 1,
+    gap: spacing(12),
+    minHeight: 0,
+    width: "100%",
+  },
+  clearButton: {
+    alignItems: "center",
+    backgroundColor: reactNativeColorScheme.ultiHuman.surface.glassFaint,
+    borderColor: reactNativeColorScheme.ultiHuman.surface.aquaBorderSoft,
+    borderRadius: radius(999),
+    borderWidth: 1,
+    flexDirection: "row",
+    gap: spacing(6),
+    minHeight: spacing(32),
+    paddingHorizontal: spacing(11),
+  },
+  clearButtonText: {
+    color: reactNativeColorScheme.ultiHuman.accent,
+    fontFamily: AppFonts.googleSansBold,
+    fontSize: fontSize(11),
+    lineHeight: spacing(15),
+  },
+  errorCard: {
+    alignSelf: "stretch",
+    backgroundColor: reactNativeColorScheme.status.danger.background,
+    borderColor: reactNativeColorScheme.status.danger.border,
+    borderRadius: radius(14),
+    borderWidth: 1,
+    gap: spacing(10),
+    padding: spacing(12),
+  },
+  errorText: {
+    color: reactNativeColorScheme.status.danger.foreground,
+    fontFamily: AppFonts.googleSansMedium,
+    fontSize: fontSize(12),
+    lineHeight: spacing(17),
+  },
   heroEyebrow: {
     color: reactNativeColorScheme.text.muted,
     fontFamily: AppFonts.googleSansBold,
@@ -442,6 +644,26 @@ const styles = StyleSheet.create({
   menuItemPressed: {
     backgroundColor: reactNativeColorScheme.ultiHuman.surface.glass,
   },
+  messageAuthor: {
+    fontFamily: AppFonts.googleSansBold,
+    fontSize: fontSize(11),
+    lineHeight: spacing(15),
+    textTransform: "uppercase",
+  },
+  messageBubble: {
+    borderRadius: radius(18),
+    borderWidth: 1,
+    gap: spacing(5),
+    maxWidth: "86%",
+    paddingHorizontal: spacing(13),
+    paddingVertical: spacing(10),
+  },
+  messageText: {
+    color: reactNativeColorScheme.text.primary,
+    fontFamily: AppFonts.googleSansRegular,
+    fontSize: fontSize(14),
+    lineHeight: spacing(20),
+  },
   micButton: {
     alignItems: "center",
     borderRadius: radius(999),
@@ -477,6 +699,41 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     paddingBottom: spacing(82),
+  },
+  retryButton: {
+    alignItems: "center",
+    alignSelf: "flex-start",
+    backgroundColor: reactNativeColorScheme.status.danger.foreground,
+    borderRadius: radius(999),
+    flexDirection: "row",
+    gap: spacing(6),
+    minHeight: spacing(32),
+    paddingHorizontal: spacing(12),
+  },
+  retryButtonText: {
+    color: reactNativeColorScheme.text.inverse,
+    fontFamily: AppFonts.googleSansBold,
+    fontSize: fontSize(11),
+    lineHeight: spacing(15),
+  },
+  typingRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: spacing(9),
+  },
+  typingText: {
+    color: reactNativeColorScheme.text.secondary,
+    fontFamily: AppFonts.googleSansMedium,
+    fontSize: fontSize(13),
+    lineHeight: spacing(18),
+  },
+  userMessageAuthor: {
+    color: reactNativeColorScheme.text.inverse,
+  },
+  userMessageBubble: {
+    alignSelf: "flex-end",
+    backgroundColor: reactNativeColorScheme.ultiHuman.accentPressed,
+    borderColor: reactNativeColorScheme.ultiHuman.accent,
   },
   waveButton: {
     alignItems: "center",

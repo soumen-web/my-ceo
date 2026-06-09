@@ -1,16 +1,22 @@
-import type { ConfigContext, ExpoConfig } from 'expo/config';
+import type { ConfigContext, ExpoConfig } from "expo/config";
 
-import appJson from './app.json' with { type: 'json' };
+import appJson from "./app.json" with { type: "json" };
 
 const expoConfig = appJson.expo as unknown as ExpoConfig & {
   extra?: Record<string, unknown>;
 };
 
 const getRuntimeExtra = () => ({
-  appEnv: process.env.EXPO_PUBLIC_APP_ENV ?? process.env.APP_ENV ?? 'development',
-  apiBaseUrl: process.env.EXPO_PUBLIC_API_BASE_URL ?? '',
-  easProjectId: process.env.EXPO_PUBLIC_EAS_PROJECT_ID ?? '',
-  mediaBaseUrl: process.env.EXPO_PUBLIC_MEDIA_BASE_URL ?? '',
+  appEnv:
+    process.env.EXPO_PUBLIC_APP_ENV ?? process.env.APP_ENV ?? "development",
+  apiBaseUrl: process.env.EXPO_PUBLIC_API_BASE_URL ?? "",
+  easProjectId: process.env.EXPO_PUBLIC_EAS_PROJECT_ID ?? "",
+  mediaBaseUrl: process.env.EXPO_PUBLIC_MEDIA_BASE_URL ?? "",
+  openRouterBaseUrl:
+    process.env.EXPO_PUBLIC_OPENROUTER_BASE_URL ??
+    "https://openrouter.ai/api/v1",
+  openRouterModel:
+    process.env.EXPO_PUBLIC_OPENROUTER_MODEL ?? "openai/gpt-4o-mini",
   tenantId: process.env.EXPO_PUBLIC_TENANT_ID,
 });
 
@@ -24,15 +30,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     ...(expoConfig.plugins ?? []),
-    'expo-font',
-    'expo-image',
+    "expo-font",
+    "expo-image",
     [
-      'expo-location',
+      "expo-location",
       {
         locationWhenInUsePermission:
-          'Allow MyCEO to capture your location after login.',
+          "Allow MyCEO to capture your location after login.",
       },
     ],
-    'expo-secure-store',
+    "expo-secure-store",
   ],
 });

@@ -7,6 +7,8 @@ interface ExpoExtra {
   apiBaseUrl?: string;
   appEnv?: string;
   mediaBaseUrl?: string;
+  openRouterBaseUrl?: string;
+  openRouterModel?: string;
   tenantId?: string;
   eas?: {
     projectId?: string;
@@ -17,6 +19,8 @@ const extra = (Constants.expoConfig?.extra ?? {}) as ExpoExtra;
 const DEFAULT_APP_ENV: AppEnvironment = 'development';
 const DEFAULT_API_BASE_URL = 'https://ultihuman-hrms-api.dedicateddevelopers.us/api/';
 const DEFAULT_MEDIA_BASE_URL = 'https://ultihuman-hrms-api.dedicateddevelopers.us';
+const DEFAULT_OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
+const DEFAULT_OPENROUTER_MODEL = 'openai/gpt-4o-mini';
 const DEFAULT_TENANT_ID = 'newgen';
 
 const stripWrappingQuotes = (value: string): string =>
@@ -91,4 +95,15 @@ export const runtimeEnv = {
   ),
   easProjectId:
     extra.eas?.projectId ?? process.env.EXPO_PUBLIC_EAS_PROJECT_ID ?? '',
+  // Keep the OpenRouter secret out of Expo config and mobile bundles.
+  // Wexa should use a backend proxy for production requests.
+  openRouterApiKey: '',
+  openRouterBaseUrl:
+    process.env.EXPO_PUBLIC_OPENROUTER_BASE_URL ??
+    extra.openRouterBaseUrl ??
+    DEFAULT_OPENROUTER_BASE_URL,
+  openRouterModel:
+    process.env.EXPO_PUBLIC_OPENROUTER_MODEL ??
+    extra.openRouterModel ??
+    DEFAULT_OPENROUTER_MODEL,
 } as const;
